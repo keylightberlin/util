@@ -1,0 +1,25 @@
+{
+  "name": "danwer81/keylightutil",
+  "description": "keylight Util Bundle",
+  "authors": [
+    {
+      "name": "keylight GmbH",
+      "email": "dw@keylight.de"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "symfony/symfony": "~2.7",
+    "symfony/yaml": "~2.7",
+    "doctrine/common": ">=2.2,<3.0",
+    "doctrine/orm": "v2.5.3",
+    "symfony/swiftmailer-bundle": "~2.3"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "\\": "src"
+    }
+  }
+}

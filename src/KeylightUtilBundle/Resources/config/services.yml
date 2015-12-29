@@ -1,0 +1,15 @@
+services:
+    entity_manager:
+        class: KeylightUtilBundle\Services\EntityManager\EntityManager
+        arguments:
+            - @doctrine.orm.entity_manager
+        class: AppBundle\Services\Util\StringFormatter
+    keylight_twig_extension:
+        class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
+        arguments:
+            - @string_formatter
+        public: false
+        tags:
+            - { name: twig.extension }
+    string_formatter:
+        class: KeylightUtilBundle\Services\String\StringFormatter
