@@ -3,7 +3,7 @@ namespace KeylightUtilBundle\Services\Twig;
 
 use KeylightUtilBundle\Services\String\StringFormatter;
 
-class KeylightTwigExtension
+class KeylightTwigExtension extends \Twig_Extension
 {
     /**
      * @var StringFormatter
