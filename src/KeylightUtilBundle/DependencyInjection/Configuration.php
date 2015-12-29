@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder
             ->root('keylight_util')
                 ->children()
-                    ->arrayNode('email')->defaultValue([])
+                    ->arrayNode('email')
                         ->children()
                             ->scalarNode('sender_address')->defaultValue("mail@keylight.de")->end()
                         ->end()
