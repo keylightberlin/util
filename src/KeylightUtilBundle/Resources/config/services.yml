@@ -7,7 +7,7 @@ services:
     keylight_twig_extension:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
-            - @string_formatter
+            - @keylight_string_formatter
         public: false
         tags:
             - { name: twig.extension }
