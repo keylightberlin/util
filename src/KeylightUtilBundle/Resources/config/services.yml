@@ -3,7 +3,6 @@ services:
         class: KeylightUtilBundle\Services\EntityManager\EntityManager
         arguments:
             - @doctrine.orm.entity_manager
-        class: AppBundle\Services\Util\StringFormatter
     keylight_twig_extension:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
@@ -13,3 +12,8 @@ services:
             - { name: twig.extension }
     keylight_string_formatter:
         class: KeylightUtilBundle\Services\String\StringFormatter
+    keylight_mailer:
+        class: KeylightUtilBundle\Services\Mailer\MailerService
+        arguments:
+            - @mailer
+            - %keylight_util_sender_address%

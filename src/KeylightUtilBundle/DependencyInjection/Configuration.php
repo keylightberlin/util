@@ -12,6 +12,17 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
+        $treeBuilder
+            ->root('keylight_util')
+                ->children()
+                    ->arrayNode('email')->defaultValue([])
+                        ->children()
+                            ->scalarNode('sender_address')->defaultValue("mail@keylight.de")->end()
+                        ->end()
+                    ->end()
+                ->end()
+        ;
+
         return $treeBuilder;
     }
 }

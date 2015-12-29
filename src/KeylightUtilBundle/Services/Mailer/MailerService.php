@@ -9,13 +9,19 @@ class MailerService
      * @var \Swift_Mailer
      */
     private $mailer;
+    /**
+     * @var string
+     */
+    private $senderAddress;
 
     /**
      * @param \Swift_Mailer $mailer
+     * @param $senderAddress
      */
-    public function __construct(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, $senderAddress)
     {
         $this->mailer = $mailer;
+        $this->senderAddress = $senderAddress;
     }
 
     /**
@@ -24,7 +30,7 @@ class MailerService
      */
     public function sendMail(Email $email)
     {
-        $email->setFrom("dw@keylight.de");
+        $email->setFrom($this->senderAddress);
         $this->mailer->send($email);
 
         return true;
