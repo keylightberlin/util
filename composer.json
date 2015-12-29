@@ -18,8 +18,8 @@
   "require-dev": {
   },
   "autoload": {
-    "psr-4": {
-      "\\": "src"
+    "psr-0": {
+      "KeylightUtilBundle\\": "src/"
     }
   }
 }
