@@ -1,6 +1,6 @@
 # Installation
 
-ADd the following part to you `composer.json`:
+Add the following part to you `composer.json`:
 
 ```
     "repositories": [
@@ -33,3 +33,14 @@ public function registerBundles()
 
 ```
 
+# Basic usage
+
+TODO
+
+## Entity traits
+
+## Emails
+
+## EntityManager
+
+## Twig extensions
