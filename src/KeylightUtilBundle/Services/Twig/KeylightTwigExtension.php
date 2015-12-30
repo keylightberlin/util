@@ -40,7 +40,7 @@ class KeylightTwigExtension extends \Twig_Extension
      * @param \DateTime $date
      * @return string
      */
-    public function formatDate(\DateTime$date)
+    public function formatDate(\DateTime $date = null)
     {
         return $this->stringFormatter->formatDate($date);
     }
@@ -49,7 +49,7 @@ class KeylightTwigExtension extends \Twig_Extension
      * @param \DateTime $date
      * @return string
      */
-    public function formatShortDate(\DateTime$date)
+    public function formatShortDate(\DateTime $date = null)
     {
         return $this->stringFormatter->formatShortDate($date);
     }

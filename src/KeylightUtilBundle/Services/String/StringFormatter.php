@@ -18,7 +18,7 @@ class StringFormatter
      */
     public function formatDate(\DateTime $dateTime = null)
     {
-        return $dateTime->format('d.m.Y');
+        return $dateTime ? $dateTime->format('d.m.Y') : '-';
     }
 
     /**
@@ -27,6 +27,6 @@ class StringFormatter
      */
     public function formatShortDate(\DateTime $dateTime = null)
     {
-        return $dateTime->format('d.m.');
+        return $dateTime ? $dateTime->format('d.m.') : '-';
     }
 }
