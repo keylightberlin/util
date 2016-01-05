@@ -45,10 +45,13 @@ class EntityManager
 
     /**
      * @param object $entity
+     * @param bool $doFlush
      */
-    public function remove($entity)
+    public function remove($entity, $doFlush = true)
     {
         $this->entityManager->remove($entity);
-        $this->entityManager->flush();
+        if ($doFlush) {
+            $this->entityManager->flush();
+        }
     }
 }
