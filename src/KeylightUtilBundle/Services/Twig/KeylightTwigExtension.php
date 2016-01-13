@@ -29,11 +29,12 @@ class KeylightTwigExtension extends \Twig_Extension
 
     /**
      * @param float $value
+     * @param null $currency
      * @return string
      */
-    public function formatMoney($value)
+    public function formatMoney($value, $currency = null)
     {
-        return $this->stringFormatter->formatMoney($value);
+        return $this->stringFormatter->formatMoney($value, $currency);
     }
 
     /**

@@ -5,11 +5,12 @@ class StringFormatter
 {
     /**
      * @param float $value
+     * @param string $currency
      * @return string
      */
-    public function formatMoney($value)
+    public function formatMoney($value, $currency = " €")
     {
-        return number_format($value, 2, ',', '.') . " €";
+        return number_format($value, 2, ',', '.') . " " . $currency;
     }
 
     /**
