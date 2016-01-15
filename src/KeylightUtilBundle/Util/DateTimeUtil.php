@@ -56,6 +56,23 @@ final class DateTimeUtil
     }
 
     /**
+     * @param \DateTime $dateTime
+     * @return \DateTime
+     */
+    public static function getStartOfDay(\DateTime $dateTime)
+    {
+        return static::getModifiedDate($dateTime, "midnight");
+    }
+    /**
+     * @param \DateTime $dateTime
+     * @return \DateTime
+     */
+    public static function getEndOfDay(\DateTime $dateTime)
+    {
+        return static::getModifiedDate(static::getDayAfter($dateTime), "midnight");
+    }
+
+    /**
      * @param \DateTime $dateA
      * @param \DateTime $dateB
      * @return bool
