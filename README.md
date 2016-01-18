@@ -35,8 +35,18 @@ public function registerBundles()
 
 # Basic usage
 
-TODO
+You can configure the following options in config.yml
 
+keylight_util:
+    email:
+        sender_address: ~ 
+    aws:
+        s3_access_key_id: ~
+        s3_secret_access_key: ~
+        s3_bucket: ~
+        s3_base_path: ~
+        cloudfront_endpoint: ~
+        
 ## Entity traits
 
 ## Emails

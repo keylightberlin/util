@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Services\Twig;
 
+use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\String\StringFormatter;
 
 class KeylightTwigExtension extends \Twig_Extension
@@ -9,13 +10,19 @@ class KeylightTwigExtension extends \Twig_Extension
      * @var StringFormatter
      */
     private $stringFormatter;
+    /**
+     * @var string
+     */
+    private $cloudfrontEndpoint;
 
     /**
      * @param StringFormatter $stringFormatter
+     * @param string $cloudfrontEndpoint
      */
-    public function __construct(StringFormatter $stringFormatter)
+    public function __construct(StringFormatter $stringFormatter, $cloudfrontEndpoint)
     {
         $this->stringFormatter = $stringFormatter;
+        $this->cloudfrontEndpoint = $cloudfrontEndpoint;
     }
 
     public function getFilters()
@@ -23,7 +30,8 @@ class KeylightTwigExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFilter('money', [$this, 'formatMoney']),
             new \Twig_SimpleFilter('defaultDate', [$this, 'formatDate']),
-            new \Twig_SimpleFilter('shortDate', [$this, 'formatShortDate'])
+            new \Twig_SimpleFilter('shortDate', [$this, 'formatShortDate']),
+            new \Twig_SimpleFilter('cloudfrontUrl', [$this, 'cloudfrontUrl']),
         ];
     }
 
@@ -53,6 +61,15 @@ class KeylightTwigExtension extends \Twig_Extension
     public function formatShortDate(\DateTime $date = null)
     {
         return $this->stringFormatter->formatShortDate($date);
+    }
+
+    /**
+     * @param Asset $asset
+     * @return string
+     */
+    public function cloudfrontUrl(Asset $asset)
+    {
+        return $this->cloudfrontEndpoint . "/" . $asset->getRelativeUrl();
     }
 
     /**

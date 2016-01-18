@@ -7,6 +7,7 @@ services:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
             - @keylight_string_formatter
+            - %keylight_util_cloudfront_endpoint%
         public: false
         tags:
             - { name: twig.extension }
@@ -17,4 +18,18 @@ services:
         arguments:
             - @mailer
             - %keylight_util_sender_address%
+    keylight_s3_client_factory:
+        class: KeylightUtilBundle\Services\Asset\AWS\S3ClientFactory
+        arguments:
+            - %keylight_util_s3_access_key_id%
+            - %keylight_util_s3_secret_access_key%
+    keylight_s3_client:
+        class: Aws\S3\S3Client
+        factory: keylight_s3_client_factory:getInstance
+    keylight_s3_uploader:
+        class: KeylightUtilBundle\Services\Asset\AWS\S3Uploader
+        arguments:
+            - @keylight_s3_client
+            - %keylight_util_s3_bucket%
+            - %keylight_util_s3_base_path%
 
