@@ -1,7 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Entity\Repository\Traits;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\QueryBuilder;
 
 trait FilterTrait
 {

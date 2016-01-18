@@ -17,3 +17,4 @@ services:
         arguments:
             - @mailer
             - %keylight_util_sender_address%
+
