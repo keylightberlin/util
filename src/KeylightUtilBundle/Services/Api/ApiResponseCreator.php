@@ -3,7 +3,7 @@ namespace KeylightUtilBundle\Services\Api;
 
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 
 class ApiResponseCreator
 {
@@ -44,7 +44,7 @@ class ApiResponseCreator
         $serializedData = $this->serializer->serialize(
             $responseData,
             self::STANDARD_RESPONSE_FORMAT,
-            $serializationLevel ? SerializationContext::create()->setGroups($serializationLevel) : []
+            $serializationLevel ? SerializationContext::create()->setGroups($serializationLevel) : SerializationContext::create()
         );
 
         $response = $this->getJsonResponse($serializedData);
@@ -79,5 +79,7 @@ class ApiResponseCreator
         $response = new Response($content);
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 }
