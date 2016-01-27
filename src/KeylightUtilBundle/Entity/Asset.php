@@ -2,7 +2,8 @@
 namespace KeylightUtilBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Comparable;
+use Gedmo\Translatable\Translatable;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="keylight_asset")
  * @ORM\HasLifecycleCallbacks()
  */
-class Asset
+class Asset implements Translatable
 {
     use IdTrait;
     use TimestampableTrait;
@@ -61,6 +62,8 @@ class Asset
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * @Gedmo\Translatable()
      */
     private $description;
 
