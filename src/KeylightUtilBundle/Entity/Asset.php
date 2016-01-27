@@ -3,6 +3,8 @@ namespace KeylightUtilBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Translatable\Translatable;
+use Gedmo\Mapping\Annotation as Gedmo;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
@@ -60,6 +62,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * @Gedmo\Translatable()
      */
     private $description;
 
