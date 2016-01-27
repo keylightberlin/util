@@ -23,6 +23,8 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_s3_base_path', $config['aws']['s3_base_path']);
         $container->setParameter('keylight_util_cloudfront_endpoint', $config['aws']['cloudfront_endpoint']);
 
+        $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

@@ -22,7 +22,7 @@ class AssetController extends Controller
     public function removeAssetAction(Asset $asset, Request $request)
     {
         $this->get('keylight_entity_manager')->remove($asset);
-        $this->get('keylight_s3_uploader')->remove($asset);
+        $this->get('keylight_s3_uploader')->removeAsset($asset);
 
         return new RedirectResponse($request->headers->get('referer'));
     }

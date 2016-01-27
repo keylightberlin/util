@@ -32,4 +32,20 @@ services:
             - @keylight_s3_client
             - %keylight_util_s3_bucket%
             - %keylight_util_s3_base_path%
-
+    keylight_asset_manager:
+        class: KeylightUtilBundle\Services\Asset\AssetManager
+    keylight_generic_asset_handler:
+        class: KeylightUtilBundle\Services\Asset\AssetHandlers\GenericAssetHandler
+        arguments:
+            - @keylight_s3_uploader
+        public: false
+        tags:
+            - { name: keylight.asset_handler, priority: 255 }
+    keylight_image_asset_handler:
+        class: KeylightUtilBundle\Services\Asset\AssetHandlers\ImageAssetHandler
+        arguments:
+            - @keylight_s3_uploader
+            - %keylight_util_asset_images%
+        public: false
+        tags:
+            - { name: keylight.asset_handler, priority: 50 }

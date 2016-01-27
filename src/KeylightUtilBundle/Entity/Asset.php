@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Comparable;
 use Doctrine\ORM\Mapping as ORM;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
@@ -64,6 +65,13 @@ class Asset
     private $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=100, nullable=true)
+     */
+    private $code;
+
+    /**
      * @var UploadedFile
      */
     private $uploadedFile;
@@ -74,6 +82,18 @@ class Asset
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
      */
     private $type;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\SubAsset", mappedBy="asset", cascade={"all"})
+     */
+    private $subAssets;
+
+    public function __construct()
+    {
+        $this->subAssets = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -209,5 +229,65 @@ class Asset
     public function getRelativeUrl()
     {
         return $this->path . $this->filename;
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    public function getRelativeUrlForSubAssetType($type)
+    {
+        $foundSubAssetUrl = null;
+
+        /** @var SubAsset $subAsset */
+        foreach ($this->subAssets as $subAsset) {
+            if ($subAsset->getType() === $type) {
+                $foundSubAssetUrl = $subAsset->getRelativeUrl();
+                break;
+            }
+        }
+
+        return $foundSubAssetUrl;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSubAssets()
+    {
+        return $this->subAssets;
+    }
+
+    /**
+     * @param ArrayCollection $subAssets
+     */
+    public function setSubAssets(ArrayCollection $subAssets)
+    {
+        $this->subAssets = $subAssets;
+    }
+
+    /**
+     * @param SubAsset $subAsset
+     */
+    public function addSubAsset(SubAsset $subAsset)
+    {
+        $subAsset->setAsset($this);
+        $this->subAssets->add($subAsset);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 }

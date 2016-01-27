@@ -36,23 +36,27 @@ class S3Uploader
      * @param Asset $asset
      * @return ResultInterface
      */
-    public function upload(Asset $asset)
+    public function uploadAsset(Asset $asset)
     {
-        $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());
         $asset->setPath($this->basePath . "/");
-        $ext = $asset->getUploadedFile()->guessExtension();
-        $asset->setFileType($ext);
-        $key = sha1(uniqid());
-        $newFilename = $key . "." . $ext;
-        $asset->setFilename($newFilename);
 
         return $this->s3Client->upload($this->bucket, $asset->getPath() . $asset->getFilename(), file_get_contents($asset->getUploadedFile()->getRealPath()));
     }
 
     /**
+     * @param string $fileName
+     * @param string $fileContents
+     * @return ResultInterface
+     */
+    public function uploadFile($fileName, $fileContents)
+    {
+        return $this->s3Client->upload($this->bucket, $this->basePath . "/" . $fileName, $fileContents);
+    }
+
+    /**
      * @param Asset $asset
      */
-    public function remove(Asset $asset)
+    public function removeAsset(Asset $asset)
     {
         if (strlen($asset->getRelativeUrl()) > 20) {
             $this->s3Client->deleteObject(
