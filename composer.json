@@ -15,8 +15,7 @@
     "doctrine/orm": "^2.4.8",
     "symfony/swiftmailer-bundle": "~2.3",
     "aws/aws-sdk-php": "^3.13",
-    "jms/serializer-bundle": "^1.1",	
-    "gedmo/doctrine-extensions": "dev-master"
+    "jms/serializer-bundle": "^1.1"
   },
   "require-dev": {
   },
