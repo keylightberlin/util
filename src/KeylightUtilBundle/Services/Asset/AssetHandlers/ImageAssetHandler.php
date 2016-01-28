@@ -33,6 +33,10 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
+        $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
+        $asset->setHeight($newImage->getImageHeight());
+        $asset->setWidth($newImage->getImageWidth());
+
         /** @var array $requiredImage */
         foreach ($this->requiredImages as $requiredImage) {
             $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
@@ -71,6 +75,8 @@ class ImageAssetHandler implements AssetHandlerInterface
             $subAsset = new SubAsset();
             $subAsset->setFilename($newFilename);
             $subAsset->setType($requiredImage['name']);
+            $subAsset->setHeight($newImage->getImageHeight());
+            $subAsset->setWidth($newImage->getImageWidth());
             $asset->addSubAsset($subAsset);
         }
     }

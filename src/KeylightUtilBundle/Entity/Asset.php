@@ -52,6 +52,20 @@ class Asset implements Translatable
     private $originalFileName;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="height", type="integer", nullable=true)
+     */
+    private $height;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="width", type="integer", nullable=true)
+     */
+    private $width;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="priority", type="integer", nullable=true)
@@ -292,5 +306,37 @@ class Asset implements Translatable
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int $height
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
     }
 }
