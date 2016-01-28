@@ -2,7 +2,7 @@
 namespace KeylightUtilBundle\Entity\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use JMS\Serializer\Annotation as Serializer;
 use KeylightUtilBundle\Entity\Asset;
 use Doctrine\ORM\Mapping as ORM;
 use KeylightUtilBundle\Model\Asset\AssetTypes;
@@ -13,6 +13,8 @@ trait AssetsTrait
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="KeylightUtilBundle\Entity\Asset", cascade={"all"})
+     *
+     * @Serializer\Exclude()
      */
     protected $assets;
 
@@ -41,50 +43,59 @@ trait AssetsTrait
     }
 
     /**
-     * @return Collection
+     * @return array
+     *
+     * @Serializer\VirtualProperty()
      */
     public function getImages()
     {
-        $images = $this->assets->filter(function (Asset $asset) {
-            return $asset->getType() === AssetTypes::IMAGE;
-        })->toArray();
-
-        usort($images, function (Asset $a, Asset $b) {
-            return $a->getPriority() < $b->getPriority();
-        });
-
-        return $images;
+        return $this->getAssetsByType(AssetTypes::IMAGE);
     }
 
     /**
-     * @return Collection
+     * @return array
+     *
+     * @Serializer\VirtualProperty()
      */
     public function getVideos()
     {
-        $videos = $this->assets->filter(function (Asset $asset) {
-            return $asset->getType() === AssetTypes::VIDEO;
-        })->toArray();
-
-        usort($videos, function (Asset $a, Asset $b) {
-            return $a->getPriority() < $b->getPriority();
-        });
-
-        return $videos;
+        return $this->getAssetsByType(AssetTypes::VIDEO);
     }
 
     /**
-     * @return Collection
+     * @return array
+     *
+     * @Serializer\VirtualProperty()
      */
     public function getPdfs()
     {
-        $pdfs = $this->assets->filter(function (Asset $asset) {
-            return $asset->getType() === AssetTypes::PDF;
+        return $this->getAssetsByType(AssetTypes::PDF);
+    }
+
+    /**
+     * @return array
+     *
+     * @Serializer\VirtualProperty()
+     */
+    public function getAudio()
+    {
+        return $this->getAssetsByType(AssetTypes::AUDIO);
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    protected function getAssetsByType($type)
+    {
+        $assetsByType = $this->assets->filter(function (Asset $asset) use ($type) {
+            return $asset->getType() === $type;
         })->toArray();
 
-        usort($pdfs, function (Asset $a, Asset $b) {
+        usort($assetsByType, function (Asset $a, Asset $b) {
             return $a->getPriority() < $b->getPriority();
         });
 
-        return $pdfs;
+        return $assetsByType;
     }
 }
