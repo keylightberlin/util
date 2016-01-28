@@ -39,6 +39,7 @@ class Configuration implements ConfigurationInterface
                                         ->scalarNode('long')->defaultValue(0)->end()
                                         ->scalarNode('short')->defaultValue(0)->end()
                                         ->scalarNode('crop')->defaultFalse()->end()
+                                        ->scalarNode('quality')->defaultValue(100)->end()
                                     ->end()
                                 ->end()
                             ->end()

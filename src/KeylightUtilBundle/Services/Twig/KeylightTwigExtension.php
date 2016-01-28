@@ -32,6 +32,7 @@ class KeylightTwigExtension extends \Twig_Extension
             new \Twig_SimpleFilter('defaultDate', [$this, 'formatDate']),
             new \Twig_SimpleFilter('shortDate', [$this, 'formatShortDate']),
             new \Twig_SimpleFilter('cloudfrontUrl', [$this, 'cloudfrontUrl']),
+            new \Twig_SimpleFilter('alertIfNotTranslated', [$this, 'alertIfNotTranslated'], array('is_safe' => array('html'))),
         ];
     }
 
@@ -73,10 +74,19 @@ class KeylightTwigExtension extends \Twig_Extension
     }
 
     /**
+     * @param string $value
+     * @return string
+     */
+    public function alertIfNotTranslated($value)
+    {
+        return false === empty($value) ? $value : "<span class='needs-translation'>[ needs translation ]</span>";
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return "getlocal_twig_extension";
+        return "keylight_util_twig_extension";
     }
 }

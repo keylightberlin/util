@@ -49,6 +49,10 @@ class ImageAssetHandler implements AssetHandlerInterface
             $imageWidth = $newImage->getImageWidth();
             $imageHeight = $newImage->getImageHeight();
             $isLandscapeFormat = $imageWidth > $imageHeight;
+            $orientation = $newImage->getImageOrientation();
+
+            $newImage->setCompression(\Imagick::COMPRESSION_JPEG);
+            $newImage->setImageCompressionQuality($requiredImage['quality']);
 
             if ($isLandscapeFormat) {
                 $desiredWidth = $requiredImage['long'];
@@ -69,6 +73,9 @@ class ImageAssetHandler implements AssetHandlerInterface
                     $newImage->resizeImage($requiredImage['short'], 0, \Imagick::FILTER_LANCZOS, 1);
                 }
             }
+
+            $newImage->stripImage();
+            $newImage->setImageOrientation($orientation);
 
             $this->s3Uploader->uploadFile($newFilename, $newImage);
 
