@@ -42,11 +42,28 @@ class ImageAssetHandler implements AssetHandlerInterface
                 . '.' .
                 pathinfo($asset->getFilename(), PATHINFO_EXTENSION);
 
-            $desiredWidth = isset($requiredImage['width']) ? $requiredImage['width'] : 0;
-            $desiredHeight = isset($requiredImage['height']) ? $requiredImage['height'] : 0;
-            $newImage->resizeImage(0, $desiredHeight, \Imagick::FILTER_LANCZOS, 1);
-            if ($desiredWidth > 0 && $desiredHeight > 0) {
-                $newImage->cropImage($desiredWidth, $desiredHeight, 0, 0);
+            $imageWidth = $newImage->getImageWidth();
+            $imageHeight = $newImage->getImageHeight();
+            $isLandscapeFormat = $imageWidth > $imageHeight;
+
+            if ($isLandscapeFormat) {
+                $desiredWidth = $requiredImage['long'];
+                $newImage->resizeImage($desiredWidth, 0, \Imagick::FILTER_LANCZOS, 1);
+
+                if (isset($requiredImage['short']) && boolval($requiredImage['crop']) == true) {
+                    $newImage->cropImage($desiredWidth, $requiredImage['short'], 0, 0);
+                } else {
+                    $newImage->resizeImage(0, $requiredImage['short'], \Imagick::FILTER_LANCZOS, 1);
+                }
+            } else {
+                $desiredHeight = $requiredImage['long'];
+                $newImage->resizeImage(0, $desiredHeight, \Imagick::FILTER_LANCZOS, 1);
+
+                if (isset($requiredImage['short']) && boolval($requiredImage['crop']) == true) {
+                    $newImage->cropImage($requiredImage['short'], $desiredHeight, 0, 0);
+                } else {
+                    $newImage->resizeImage($requiredImage['short'], 0, \Imagick::FILTER_LANCZOS, 1);
+                }
             }
 
             $this->s3Uploader->uploadFile($newFilename, $newImage);
