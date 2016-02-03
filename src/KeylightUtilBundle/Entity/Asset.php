@@ -5,6 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Translatable;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation\Groups;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
@@ -25,6 +27,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="file_type", type="string", length=50, nullable=true)
+     *
+     * @Groups({"asset_details"})
      */
     private $fileType;
 
@@ -32,6 +36,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=200, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $filename;
 
@@ -41,6 +47,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=200, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $path;
 
@@ -48,6 +56,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="original_file_name", type="string", length=200, nullable=true)
+     *
+     * @Exclude()
      */
     private $originalFileName;
 
@@ -55,6 +65,8 @@ class Asset implements Translatable
      * @var int
      *
      * @ORM\Column(name="height", type="integer", nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $height;
 
@@ -62,6 +74,8 @@ class Asset implements Translatable
      * @var int
      *
      * @ORM\Column(name="width", type="integer", nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $width;
 
@@ -69,6 +83,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="priority", type="integer", nullable=true)
+     *
+     * @Exclude()
      */
     private $priority;
 
@@ -76,6 +92,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      *
      * @Gedmo\Translatable()
      */
@@ -97,6 +115,8 @@ class Asset implements Translatable
      * @var string
      *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $type;
 
@@ -104,6 +124,8 @@ class Asset implements Translatable
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\SubAsset", mappedBy="asset", cascade={"all"})
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $subAssets;
 

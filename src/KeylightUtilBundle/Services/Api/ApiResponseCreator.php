@@ -31,7 +31,7 @@ class ApiResponseCreator
 
     /**
      * @param array $data
-     * @param string|null $serializationLevel
+     * @param string|null|array $serializationLevel
      * @return Response
      */
     public function createResponse(array $data, $serializationLevel = null)

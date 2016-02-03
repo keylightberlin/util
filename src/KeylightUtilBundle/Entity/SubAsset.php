@@ -3,6 +3,8 @@ namespace KeylightUtilBundle\Entity;
 
 use Doctrine\Common\Comparable;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation\Groups;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
@@ -20,6 +22,8 @@ class SubAsset
      * @var string
      *
      * @ORM\Column(name="sub_asset_type", type="string", length=50, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $type;
 
@@ -27,6 +31,8 @@ class SubAsset
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=200, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $filename;
 
@@ -34,6 +40,8 @@ class SubAsset
      * @var int
      *
      * @ORM\Column(name="height", type="integer", nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $height;
 
@@ -41,6 +49,8 @@ class SubAsset
      * @var int
      *
      * @ORM\Column(name="width", type="integer", nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     private $width;
 
@@ -48,6 +58,8 @@ class SubAsset
      * @var Asset
      *
      * @ORM\ManyToOne(targetEntity="KeylightUtilBundle\Entity\Asset", inversedBy="subAssets")
+     *
+     * @Exclude()
      */
     private $asset;
 
