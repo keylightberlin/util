@@ -79,6 +79,6 @@ final class DateTimeUtil
      */
     public static function isOnSameDay(\DateTime $dateA, \DateTime $dateB)
     {
-        return static::getDateAtMidnight($dateA) === static::getDateAtMidnight($dateB);
+        return static::getDateAtMidnight($dateA) == static::getDateAtMidnight($dateB); // Häh?! === does not work.
     }
 }
