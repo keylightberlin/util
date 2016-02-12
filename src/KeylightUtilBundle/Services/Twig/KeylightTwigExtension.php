@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Twig;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
 use KeylightUtilBundle\Services\String\StringFormatter;
 
 class KeylightTwigExtension extends \Twig_Extension
@@ -11,27 +12,32 @@ class KeylightTwigExtension extends \Twig_Extension
      */
     private $stringFormatter;
     /**
-     * @var string
+     * @var AssetProviderInterface
      */
-    private $cloudfrontEndpoint;
+    private $assetProvider;
 
     /**
      * @param StringFormatter $stringFormatter
-     * @param string $cloudfrontEndpoint
+     * @param AssetProviderInterface $assetProviderInterface
      */
-    public function __construct(StringFormatter $stringFormatter, $cloudfrontEndpoint)
+    public function __construct(StringFormatter $stringFormatter, AssetProviderInterface $assetProviderInterface)
     {
         $this->stringFormatter = $stringFormatter;
-        $this->cloudfrontEndpoint = $cloudfrontEndpoint;
+        $this->assetProvider = $assetProviderInterface;
     }
 
+    /**
+     * @return array
+     */
     public function getFilters()
     {
         return [
             new \Twig_SimpleFilter('money', [$this, 'formatMoney']),
             new \Twig_SimpleFilter('defaultDate', [$this, 'formatDate']),
             new \Twig_SimpleFilter('shortDate', [$this, 'formatShortDate']),
+            new \Twig_SimpleFilter('fullDate', [$this, 'formatFullDate']),
             new \Twig_SimpleFilter('cloudfrontUrl', [$this, 'cloudfrontUrl']),
+            new \Twig_SimpleFilter('publicUrl', [$this, 'publicUrl']),
             new \Twig_SimpleFilter('alertIfNotTranslated', [$this, 'alertIfNotTranslated'], array('is_safe' => array('html'))),
         ];
     }
@@ -65,12 +71,32 @@ class KeylightTwigExtension extends \Twig_Extension
     }
 
     /**
+     * @param \DateTime $date
+     * @return string
+     */
+    public function formatFullDate(\DateTime $date = null)
+    {
+        return $this->stringFormatter->formatDateTime($date);
+    }
+
+    /**
+     * @deprecated Use publicUrl instead.
+     *
      * @param Asset $asset
      * @return string
      */
     public function cloudfrontUrl(Asset $asset)
     {
-        return $this->cloudfrontEndpoint . "/" . $asset->getRelativeUrl();
+        return $this->assetProvider->getUrlForAsset($asset);
+    }
+
+    /**
+     * @param Asset $asset
+     * @return string
+     */
+    public function publicUrl(Asset $asset)
+    {
+        return $this->assetProvider->getUrlForAsset($asset);
     }
 
     /**

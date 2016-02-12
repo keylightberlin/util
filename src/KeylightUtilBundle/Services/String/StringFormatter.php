@@ -26,6 +26,15 @@ class StringFormatter
      * @param \DateTime|null $dateTime
      * @return string
      */
+    public function formatDateTime(\DateTime $dateTime = null)
+    {
+        return $dateTime ? $dateTime->format('d.m.Y H:i:s') : '-';
+    }
+
+    /**
+     * @param \DateTime|null $dateTime
+     * @return string
+     */
     public function formatShortDate(\DateTime $dateTime = null)
     {
         return $dateTime ? $dateTime->format('d.m.') : '-';

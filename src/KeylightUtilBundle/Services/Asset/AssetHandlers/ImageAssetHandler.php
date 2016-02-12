@@ -4,7 +4,7 @@ namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Entity\SubAsset;
 use KeylightUtilBundle\Model\Asset\AssetTypes;
-use KeylightUtilBundle\Services\Asset\AWS\S3Uploader;
+use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 
 class ImageAssetHandler implements AssetHandlerInterface
 {
@@ -13,18 +13,18 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     private $requiredImages;
     /**
-     * @var S3Uploader
+     * @var AssetStorageInterface
      */
-    private $s3Uploader;
+    private $assetStorage;
 
     /**
-     * @param S3Uploader $s3Uploader
+     * @param AssetStorageInterface $assetStorage
      * @param array $requiredImages
      */
-    public function __construct(S3Uploader $s3Uploader, array $requiredImages)
+    public function __construct(AssetStorageInterface $assetStorage, array $requiredImages)
     {
         $this->requiredImages = $requiredImages;
-        $this->s3Uploader = $s3Uploader;
+        $this->assetStorage = $assetStorage;
     }
 
     /**
@@ -77,7 +77,7 @@ class ImageAssetHandler implements AssetHandlerInterface
             $newImage->stripImage();
             $newImage->setImageOrientation($orientation);
 
-            $this->s3Uploader->uploadFile($newFilename, $newImage);
+            $this->assetStorage->uploadFile($newFilename, $newImage);
 
             $subAsset = new SubAsset();
             $subAsset->setFilename($newFilename);

@@ -2,21 +2,22 @@
 namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 use KeylightUtilBundle\Services\Asset\AWS\S3Uploader;
 
 class GenericAssetHandler implements AssetHandlerInterface
 {
     /**
-     * @var S3Uploader
+     * @var AssetStorageInterface
      */
-    private $s3Uploader;
+    private $assetStorage;
 
     /**
-     * @param S3Uploader $s3Uploader
+     * @param AssetStorageInterface $assetStorage
      */
-    public function __construct(S3Uploader $s3Uploader)
+    public function __construct(AssetStorageInterface $assetStorage)
     {
-        $this->s3Uploader = $s3Uploader;
+        $this->assetStorage = $assetStorage;
     }
 
     /**
@@ -32,7 +33,7 @@ class GenericAssetHandler implements AssetHandlerInterface
         $newFilename = $key . "." . $ext;
         $asset->setFilename($newFilename);
 
-        $this->s3Uploader->uploadAsset($asset);
+        $this->assetStorage->uploadAsset($asset);
     }
 
     /**
@@ -40,7 +41,7 @@ class GenericAssetHandler implements AssetHandlerInterface
      */
     public function handleRemove($asset)
     {
-        $this->s3Uploader->removeAsset($asset);
+        $this->assetStorage->removeAsset($asset);
     }
 
     /**

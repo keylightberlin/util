@@ -25,6 +25,14 @@ class KeylightUtilExtension extends Extension
 
         $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
 
+        if ($config['asset']['storage_type'] === 'aws') {
+            $container->setAlias('keylight_util_asset_storage', 'keylight_s3_uploader');
+            $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_storage');
+        } else {
+            $container->setAlias('keylight_util_asset_storage', 'keylight_local_asset_storage');
+            $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_storage');
+        }
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

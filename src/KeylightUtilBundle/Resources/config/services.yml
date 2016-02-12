@@ -7,7 +7,7 @@ services:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
             - @keylight_string_formatter
-            - %keylight_util_cloudfront_endpoint%
+            - @keylight_util_asset_provider
         public: false
         tags:
             - { name: twig.extension }
@@ -32,19 +32,27 @@ services:
             - @keylight_s3_client
             - %keylight_util_s3_bucket%
             - %keylight_util_s3_base_path%
+    keylight_cloudfront_asset_provider:
+        class: KeylightUtilBundle\Services\Asset\AWS\CloudfrontAssetProvider
+        arguments:
+            - %keylight_util_cloudfront_endpoint%
+    keylight_local_asset_storage:
+        class: KeylightUtilBundle\Services\Asset\Local\LocalAssetStorage
+        arguments:
+            - %kernel.root_dir%
     keylight_asset_manager:
         class: KeylightUtilBundle\Services\Asset\AssetManager
     keylight_generic_asset_handler:
         class: KeylightUtilBundle\Services\Asset\AssetHandlers\GenericAssetHandler
         arguments:
-            - @keylight_s3_uploader
+            - @keylight_util_asset_storage
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 255 }
     keylight_image_asset_handler:
         class: KeylightUtilBundle\Services\Asset\AssetHandlers\ImageAssetHandler
         arguments:
-            - @keylight_s3_uploader
+            - @keylight_util_asset_storage
             - %keylight_util_asset_images%
         public: false
         tags:
