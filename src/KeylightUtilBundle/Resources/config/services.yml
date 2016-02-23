@@ -13,6 +13,8 @@ services:
             - { name: twig.extension }
     keylight_string_formatter:
         class: KeylightUtilBundle\Services\String\StringFormatter
+        arguments:
+            - %locale%
     keylight_mailer:
         class: KeylightUtilBundle\Services\Mailer\MailerService
         arguments:
