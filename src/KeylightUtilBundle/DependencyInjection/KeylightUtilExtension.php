@@ -27,7 +27,7 @@ class KeylightUtilExtension extends Extension
 
         if ($config['asset']['storage_type'] === 'aws') {
             $container->setAlias('keylight_util_asset_storage', 'keylight_s3_uploader');
-            $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_storage');
+            $container->setAlias('keylight_util_asset_provider', 'keylight_cloudfront_asset_provider');
         } else {
             $container->setAlias('keylight_util_asset_storage', 'keylight_local_asset_storage');
             $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_storage');
