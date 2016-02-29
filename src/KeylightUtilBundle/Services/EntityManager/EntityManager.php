@@ -35,6 +35,14 @@ class EntityManager
     }
 
     /**
+     * 
+     */
+    public function clear()
+    {
+        $this->entityManager->clear();
+    }
+
+    /**
      * @param object $entity
      */
     public function save($entity)
