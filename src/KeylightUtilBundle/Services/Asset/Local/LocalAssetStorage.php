@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Asset\Local;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
 use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 
@@ -52,19 +53,19 @@ class LocalAssetStorage implements AssetStorageInterface, AssetProviderInterface
     }
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function getFileForAsset(Asset $asset)
+    public function getFileForAsset(AssetInterface $asset)
     {
         return file_get_contents($this->basePath . $asset->getRelativeUrl());
     }
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function getUrlForAsset(Asset $asset)
+    public function getUrlForAsset(AssetInterface $asset)
     {
         return static::UPLOADS_BASE_DIR . $asset->getRelativeUrl();
     }

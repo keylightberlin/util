@@ -7,6 +7,7 @@ use Gedmo\Translatable\Translatable;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation\Groups;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="keylight_asset")
  * @ORM\HasLifecycleCallbacks()
  */
-class Asset implements Translatable
+class Asset implements Translatable, AssetInterface
 {
     use IdTrait;
     use TimestampableTrait;
@@ -268,6 +269,25 @@ class Asset implements Translatable
     public function getRelativeUrl()
     {
         return $this->path . $this->filename;
+    }
+
+    /**
+     * @param string $type
+     * @return SubAsset
+     */
+    public function getSubAssetByType($type)
+    {
+        $foundSubAsset = null;
+
+        /** @var SubAsset $subAsset */
+        foreach ($this->subAssets as $subAsset) {
+            if ($subAsset->getType() === $type) {
+                $foundSubAsset = $subAsset;
+                break;
+            }
+        }
+
+        return $foundSubAsset;
     }
 
     /**

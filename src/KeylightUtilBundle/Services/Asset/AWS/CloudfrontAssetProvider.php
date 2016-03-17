@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Asset\AWS;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
 
 class CloudfrontAssetProvider implements AssetProviderInterface
@@ -20,19 +21,19 @@ class CloudfrontAssetProvider implements AssetProviderInterface
     }
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function getFileForAsset(Asset $asset)
+    public function getFileForAsset(AssetInterface $asset)
     {
         return file_get_contents($this->getUrlForAsset($asset));
     }
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function getUrlForAsset(Asset $asset)
+    public function getUrlForAsset(AssetInterface $asset)
     {
         return $this->cloudfrontEndpoint . "/" . $asset->getRelativeUrl();
     }

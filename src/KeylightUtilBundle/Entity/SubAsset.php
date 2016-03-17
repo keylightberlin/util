@@ -5,6 +5,7 @@ use Doctrine\Common\Comparable;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation\Groups;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Entity()
  * @ORM\Table(name="keylight_sub_asset")
  */
-class SubAsset
+class SubAsset implements AssetInterface
 {
     use IdTrait;
 

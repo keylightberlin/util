@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Twig;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
 use KeylightUtilBundle\Services\String\StringFormatter;
 
@@ -83,19 +84,19 @@ class KeylightTwigExtension extends \Twig_Extension
     /**
      * @deprecated Use publicUrl instead.
      *
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function cloudfrontUrl(Asset $asset)
+    public function cloudfrontUrl(AssetInterface $asset)
     {
         return $this->assetProvider->getUrlForAsset($asset);
     }
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $asset
      * @return string
      */
-    public function publicUrl(Asset $asset)
+    public function publicUrl(AssetInterface $asset)
     {
         return $this->assetProvider->getUrlForAsset($asset);
     }

@@ -2,18 +2,19 @@
 namespace KeylightUtilBundle\Services\Asset;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 
 interface AssetProviderInterface
 {
     /**
-     * @param Asset $asset
+     * @param AssetInterface $assetInterface
      * @return string
      */
-    public function getFileForAsset(Asset $asset);
+    public function getFileForAsset(AssetInterface $assetInterface);
 
     /**
-     * @param Asset $asset
+     * @param AssetInterface $assetInterface
      * @return string
      */
-    public function getUrlForAsset(Asset $asset);
+    public function getUrlForAsset(AssetInterface $assetInterface);
 }

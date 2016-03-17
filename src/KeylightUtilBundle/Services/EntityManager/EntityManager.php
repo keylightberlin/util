@@ -35,7 +35,7 @@ class EntityManager
     }
 
     /**
-     * 
+     *
      */
     public function clear()
     {
