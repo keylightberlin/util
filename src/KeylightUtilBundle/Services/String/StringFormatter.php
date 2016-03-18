@@ -21,8 +21,12 @@ class StringFormatter
      * @param string $currency
      * @return string
      */
-    public function formatMoney($value, $currency = " €")
+    public function formatMoney($value, $currency = "€")
     {
+        if (empty($currency)) {
+            $currency = "€";
+        }
+
         return number_format($value, 2, ',', '.') . " " . $currency;
     }
 
