@@ -22,7 +22,7 @@ class AssetManager implements AssetManagerInterface
     public function saveAsset(Asset $asset)
     {
         /** @var AssetHandlerInterface $assetHandler */
-        foreach ($this->assetHandlers as $assetHandler) {
+        foreach (clone $this->assetHandlers as $assetHandler) {
             if ($assetHandler->supportsAsset($asset)) {
                 $assetHandler->handleSave($asset);
             }
@@ -35,7 +35,7 @@ class AssetManager implements AssetManagerInterface
     public function removeAsset(Asset $asset)
     {
         /** @var AssetHandlerInterface $assetHandler */
-        foreach ($this->assetHandlers as $assetHandler) {
+        foreach (clone $this->assetHandlers as $assetHandler) {
             if ($assetHandler->supportsAsset($asset)) {
                 $assetHandler->handleRemove($asset);
             }
