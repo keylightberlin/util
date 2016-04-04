@@ -102,6 +102,6 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function supportsAsset(Asset $asset)
     {
-        return AssetTypes::IMAGE === $asset->getType();
+        return $asset->isImage();
     }
 }

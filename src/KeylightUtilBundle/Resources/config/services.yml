@@ -71,3 +71,5 @@ services:
         factory: doctrine.orm.entity_manager:getRepository
         arguments:
             - "KeylightUtilBundle:Asset"
+    keylight_random_string_util:
+        class: KeylightUtilBundle\Services\String\RandomStringUtil

@@ -11,6 +11,7 @@ use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
+use KeylightUtilBundle\Model\Asset\AssetTypes;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -380,5 +381,11 @@ class Asset implements Translatable, AssetInterface
     public function setWidth($width)
     {
         $this->width = $width;
+    }
+
+    public function isImage()
+    {
+        return $this->type === AssetTypes::IMAGE
+            || in_array(strtolower(pathinfo($this->originalFileName, PATHINFO_EXTENSION)), ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'tif']);
     }
 }
