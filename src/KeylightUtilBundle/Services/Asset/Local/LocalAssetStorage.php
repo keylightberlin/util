@@ -8,7 +8,7 @@ use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 
 class LocalAssetStorage implements AssetStorageInterface, AssetProviderInterface
 {
-    const UPLOADS_BASE_DIR = "uploads/";
+    const UPLOADS_BASE_DIR = "/uploads/";
 
     /**
      * @var string
@@ -20,7 +20,7 @@ class LocalAssetStorage implements AssetStorageInterface, AssetProviderInterface
      */
     public function __construct($baseDir)
     {
-        $this->basePath = $baseDir . '/../web/' . static::UPLOADS_BASE_DIR;
+        $this->basePath = $baseDir . '/../web' . static::UPLOADS_BASE_DIR;
     }
 
     /**
