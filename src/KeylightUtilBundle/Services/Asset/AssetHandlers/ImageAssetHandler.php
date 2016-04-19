@@ -74,8 +74,12 @@ class ImageAssetHandler implements AssetHandlerInterface
                 }
             }
 
-            $newImage->stripImage();
-            $newImage->setImageOrientation($orientation);
+            /**
+             * This unfortunately kills the orientation. Leave EXIF-Info for now.
+             *
+             * $newImage->stripImage();
+             * $newImage->setImageOrientation($orientation);
+             */
 
             $this->assetStorage->uploadFile($newFilename, $newImage);
 
