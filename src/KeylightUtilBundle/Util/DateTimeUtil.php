@@ -6,6 +6,8 @@ namespace KeylightUtilBundle\Util;
  */
 final class DateTimeUtil
 {
+    const DEFAULT_DATE_FORMAT = "Y-m-d";
+
     /**
      * @param \DateTime $dateTime
      * @return \DateTime
@@ -80,5 +82,18 @@ final class DateTimeUtil
     public static function isOnSameDay(\DateTime $dateA, \DateTime $dateB)
     {
         return static::getDateAtMidnight($dateA) == static::getDateAtMidnight($dateB); // Häh?! === does not work.
+    }
+
+    /**
+     * Return the \DateTime object of that day and time. Time is given as H:i
+     * Not very elegant.
+     *
+     * @param \DateTime $day
+     * @param $time
+     * @return \DateTime
+     */
+    public static function getDateTimeForDayAndTime(\DateTime $day, $time)
+    {
+        return \DateTime::createFromFormat(static::DEFAULT_DATE_FORMAT . " H:i", $day->format(static::DEFAULT_DATE_FORMAT) . " " . $time);
     }
 }
