@@ -2,8 +2,10 @@
 namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Entity\SubAsset;
 use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 use KeylightUtilBundle\Services\Asset\AWS\S3Uploader;
+use KeylightUtilBundle\Services\EntityManager\EntityManager;
 
 class GenericAssetHandler implements AssetHandlerInterface
 {
@@ -11,13 +13,19 @@ class GenericAssetHandler implements AssetHandlerInterface
      * @var AssetStorageInterface
      */
     private $assetStorage;
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
 
     /**
      * @param AssetStorageInterface $assetStorage
+     * @param EntityManager $entityManager
      */
-    public function __construct(AssetStorageInterface $assetStorage)
+    public function __construct(AssetStorageInterface $assetStorage, EntityManager $entityManager)
     {
         $this->assetStorage = $assetStorage;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -26,6 +34,12 @@ class GenericAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
+        /** @var SubAsset $subAsset */
+        foreach ($asset->getSubAssets() as $subAsset) {
+            $this->entityManager->remove($subAsset, false);
+        }
+        $this->entityManager->flush();
+
         /** If it's the same field, skip initializing and uploading it. */
         if ($asset->getOriginalFileName() !== $asset->getUploadedFile()->getClientOriginalName()) {
             $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());

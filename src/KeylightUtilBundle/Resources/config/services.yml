@@ -48,6 +48,7 @@ services:
         class: KeylightUtilBundle\Services\Asset\AssetHandlers\GenericAssetHandler
         arguments:
             - @keylight_util_asset_storage
+            - @keylight_entity_manager
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 255 }
