@@ -96,4 +96,18 @@ final class DateTimeUtil
     {
         return \DateTime::createFromFormat(static::DEFAULT_DATE_FORMAT . " H:i", $day->format(static::DEFAULT_DATE_FORMAT) . " " . $time);
     }
+
+    /**
+     * Returns the number of days that lie between firstDate and secondDate, on a day basis. That means that
+     * in particular that DateTime objects that are on the same day have difference 0.
+     *
+     * If firstDate is bigger than secondDate, this number will be negative.
+     */
+    public static function getDifferenceInNumberOfDays(\DateTime $firstDate, \DateTime $secondDate)
+    {
+        $firstDateAtMidnight = static::getDateAtMidnight($firstDate);
+        $secondDateAtMidnight = static::getDateAtMidnight($secondDate);
+
+        return $firstDateAtMidnight->diff($secondDateAtMidnight)->d;
+    }
 }
