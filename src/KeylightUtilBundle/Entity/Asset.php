@@ -127,7 +127,7 @@ class Asset implements Translatable, AssetInterface
      *
      * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\SubAsset", mappedBy="asset", cascade={"all"})
      *
-     * @Groups({"asset_list", "asset_details"})
+     * @Groups({"asset_details"})
      */
     private $subAssets;
 
