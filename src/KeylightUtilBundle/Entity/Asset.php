@@ -82,7 +82,7 @@ class Asset implements Translatable, AssetInterface
     private $width;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="priority", type="integer", nullable=true)
      *
@@ -217,7 +217,7 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPriority()
     {
@@ -225,7 +225,7 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
-     * @param string $priority
+     * @param int $priority
      */
     public function setPriority($priority)
     {
@@ -383,6 +383,9 @@ class Asset implements Translatable, AssetInterface
         $this->width = $width;
     }
 
+    /**
+     * @return bool
+     */
     public function isImage()
     {
         return $this->type === AssetTypes::IMAGE

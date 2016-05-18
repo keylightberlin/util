@@ -23,7 +23,12 @@ trait AssetsTrait
      */
     public function getAssets()
     {
-        return $this->assets;
+        $assetsAsArray = $this->assets->toArray();
+        usort($assetsAsArray, function (Asset $a, Asset $b) {
+            return $a->getPriority() > $b->getPriority();
+        });
+
+        return new ArrayCollection($assetsAsArray);
     }
 
     /**
@@ -93,7 +98,7 @@ trait AssetsTrait
         })->toArray();
 
         usort($assetsByType, function (Asset $a, Asset $b) {
-            return $a->getPriority() < $b->getPriority();
+            return $a->getPriority() > $b->getPriority();
         });
 
         return $assetsByType;
