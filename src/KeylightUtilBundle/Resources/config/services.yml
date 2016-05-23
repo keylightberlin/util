@@ -74,3 +74,8 @@ services:
             - "KeylightUtilBundle:Asset"
     keylight_random_string_util:
         class: KeylightUtilBundle\Services\String\RandomStringUtil
+    keylight_uuid_provider:
+        class: KeylightUtilBundle\Services\Uuid\UuidProvider
+        arguments:
+            - @keylight_entity_manager
+            - @keylight_random_string_util
