@@ -391,4 +391,20 @@ class Asset implements Translatable, AssetInterface
         return $this->type === AssetTypes::IMAGE
             || in_array(strtolower(pathinfo($this->originalFileName, PATHINFO_EXTENSION)), ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'tif']);
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->filename);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotEmpty()
+    {
+        return false === $this->isEmpty();
+    }
 }
