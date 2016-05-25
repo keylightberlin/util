@@ -40,6 +40,7 @@ class KeylightTwigExtension extends \Twig_Extension
             new \Twig_SimpleFilter('cloudfrontUrl', [$this, 'cloudfrontUrl']),
             new \Twig_SimpleFilter('publicUrl', [$this, 'publicUrl']),
             new \Twig_SimpleFilter('dateWeekday', [$this, 'dateWeekday']),
+            new \Twig_SimpleFilter('hyphenate', [$this, 'hyphenate']),
             new \Twig_SimpleFilter('alertIfNotTranslated', [$this, 'alertIfNotTranslated'], array('is_safe' => array('html'))),
         ];
     }
@@ -117,6 +118,15 @@ class KeylightTwigExtension extends \Twig_Extension
     public function dateWeekday(\DateTime $date)
     {
         return $this->stringFormatter->getFullWeekday($date);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public function hyphenate($string)
+    {
+        return $this->stringFormatter->getHyphenation($string);
     }
 
     /**

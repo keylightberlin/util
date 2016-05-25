@@ -82,7 +82,7 @@ class Asset implements Translatable, AssetInterface
     private $width;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="priority", type="integer", nullable=true)
      *
@@ -127,7 +127,7 @@ class Asset implements Translatable, AssetInterface
      *
      * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\SubAsset", mappedBy="asset", cascade={"all"})
      *
-     * @Groups({"asset_list", "asset_details"})
+     * @Groups({"asset_details"})
      */
     private $subAssets;
 
@@ -217,7 +217,7 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPriority()
     {
@@ -225,7 +225,7 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
-     * @param string $priority
+     * @param int $priority
      */
     public function setPriority($priority)
     {
@@ -383,9 +383,28 @@ class Asset implements Translatable, AssetInterface
         $this->width = $width;
     }
 
+    /**
+     * @return bool
+     */
     public function isImage()
     {
         return $this->type === AssetTypes::IMAGE
             || in_array(strtolower(pathinfo($this->originalFileName, PATHINFO_EXTENSION)), ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'tif']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->filename);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotEmpty()
+    {
+        return false === $this->isEmpty();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Services\EntityManager;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EntityManager
@@ -61,5 +62,14 @@ class EntityManager
         if ($doFlush) {
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @param $className
+     * @return ObjectRepository
+     */
+    public function getRepository($className)
+    {
+        return $this->entityManager->getRepository($className);
     }
 }

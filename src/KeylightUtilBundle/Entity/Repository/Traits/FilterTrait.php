@@ -10,7 +10,7 @@ trait FilterTrait
     /**
      * @param QueryBuilder $queryBuilder
      * @param string $name
-     * @param mixed $value
+     * @param string $value
      *
      * @return QueryBuilder
      */
@@ -24,6 +24,50 @@ trait FilterTrait
                     $name . " LIKE :" . $randomPlaceholder
                 )
                 ->setParameter($randomPlaceholder, "%" . $value . "%");
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param string $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addSuffixLikeFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        if ($value != null) {
+            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
+
+            $queryBuilder
+                ->andWhere(
+                    $name . " LIKE :" . $randomPlaceholder
+                )
+                ->setParameter($randomPlaceholder, "%" . $value);
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param string $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addPrefixLikeFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        if ($value != null) {
+            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
+
+            $queryBuilder
+                ->andWhere(
+                    $name . " LIKE :" . $randomPlaceholder
+                )
+                ->setParameter($randomPlaceholder, $value . "%");
         }
 
         return $queryBuilder;

@@ -58,6 +58,17 @@ class StringFormatter
     }
 
     /**
+     * Replace -- by an invisble space.
+     *
+     * @param $string
+     * @return string
+     */
+    public function getHyphenation($string)
+    {
+        return str_replace("--", "\xC2\xAD", $string);
+    }
+
+    /**
      * @param \DateTime $dateTime
      * @return string
      */
