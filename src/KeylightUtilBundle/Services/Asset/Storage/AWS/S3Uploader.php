@@ -4,7 +4,7 @@ namespace KeylightUtilBundle\Services\Asset\Storage\AWS;
 use Aws\ResultInterface;
 use KeylightUtilBundle\Entity\Asset;
 use Aws\S3\S3Client;
-use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class S3Uploader implements AssetStorageInterface
 {

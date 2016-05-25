@@ -30,6 +30,8 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('s3_private_base_path')->defaultValue('default')->end()
                             ->scalarNode('cloudfront_public_endpoint')->defaultValue('YOUR_PUBLIC_CLOUDFRONT_ENDPOINT')->end()
                             ->scalarNode('cloudfront_private_endpoint')->defaultValue('YOUR_PRIVATE_CLOUDFRONT_ENDPOINT')->end()
+                            ->scalarNode('cloudfront_private_key')->defaultValue('YOUR_PRIVATE_KEY')->end()
+                            ->scalarNode('cloudfront_private_key_pair_id')->defaultValue('YOUR_PRIVATE_KEY_PAIR_ID')->end()
                         ->end()
                     ->end()
                     ->arrayNode('asset')

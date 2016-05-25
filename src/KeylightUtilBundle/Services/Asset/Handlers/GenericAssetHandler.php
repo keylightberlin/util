@@ -2,7 +2,7 @@
 namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Services\Asset\Providers\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 use KeylightUtilBundle\Services\EntityManager\EntityManager;
 
 class GenericAssetHandler implements AssetHandlerInterface
@@ -43,6 +43,7 @@ class GenericAssetHandler implements AssetHandlerInterface
         if ($asset->getOriginalFileName() !== $asset->getFile()->getClientOriginalName()) {
             $asset->setOriginalFileName($asset->getFile()->getClientOriginalName());
             $ext = $asset->getFile()->guessExtension();
+            $asset->setProcessedType("original");
             $asset->setFileType($ext);
             $key = substr(sha1(uniqid()), 0, 15);
             $newFilename = $key . "." . $ext;

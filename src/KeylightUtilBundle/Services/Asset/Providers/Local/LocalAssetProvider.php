@@ -2,8 +2,9 @@
 namespace KeylightUtilBundle\Services\Asset\Providers\Local;
 
 use KeylightUtilBundle\Entity\Asset;
+use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 
-class LocalAssetProvider
+class LocalAssetProvider implements AssetProviderInterface
 {
     const UPLOADS_BASE_DIR = "/uploads/";
 

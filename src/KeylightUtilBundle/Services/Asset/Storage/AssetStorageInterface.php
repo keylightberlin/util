@@ -1,5 +1,5 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\Providers;
+namespace KeylightUtilBundle\Services\Asset\Storage;
 
 use KeylightUtilBundle\Entity\Asset;
 
