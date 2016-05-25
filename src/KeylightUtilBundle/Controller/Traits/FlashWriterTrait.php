@@ -1,7 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Controller\Traits;
 
-trait FlashWriter
+trait FlashWriterTrait
 {
     /**
      * @param string $message

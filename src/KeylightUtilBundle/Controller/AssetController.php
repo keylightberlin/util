@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/asset")
+ * @\Symfony\Component\Routing\Annotation\Route("/asset")
  */
 class AssetController extends Controller
 {

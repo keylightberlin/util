@@ -1,5 +1,5 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
+namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
 
@@ -12,13 +12,13 @@ interface AssetHandlerInterface
     public function handleSave(Asset $asset);
 
     /**
-     * @param $asset
+     * @param Asset $asset
      */
-    public function handleRemove($asset);
+    public function handleRemove(Asset $asset);
 
     /**
      * @param Asset $asset
-     * @return boolean
+     * @return bool
      */
     public function supportsAsset(Asset $asset);
 }

@@ -102,6 +102,10 @@ final class DateTimeUtil
      * in particular that DateTime objects that are on the same day have difference 0.
      *
      * If firstDate is bigger than secondDate, this number will be negative.
+     *
+     * @param \DateTime $firstDate
+     * @param \DateTime $secondDate
+     * @return int
      */
     public static function getDifferenceInNumberOfDays(\DateTime $firstDate, \DateTime $secondDate)
     {

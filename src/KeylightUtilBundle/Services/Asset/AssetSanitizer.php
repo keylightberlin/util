@@ -3,9 +3,8 @@ namespace KeylightUtilBundle\Services\Asset;
 
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Entity\Repository\AssetRepository;
-use KeylightUtilBundle\Entity\SubAsset;
+use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 use KeylightUtilBundle\Services\EntityManager\EntityManager;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AssetSanitizer
@@ -73,7 +72,7 @@ class AssetSanitizer
         $file = file_get_contents($assetOriginalFilename);
         $localName = "/tmp/" . uniqid();
         file_put_contents($localName, $file);
-        $asset->setUploadedFile(new UploadedFile($localName, $asset->getOriginalFileName()));
+        $asset->setFile(new UploadedFile($localName, $asset->getOriginalFileName()));
         $this->assetManager->saveAsset($asset);
         exec("rm " . $localName);
     }
@@ -84,7 +83,7 @@ class AssetSanitizer
     private function clearSubAssets(Asset $asset)
     {
         /** @var SubAsset $subAsset */
-        foreach ($asset->getSubAssets() as $subAsset) {
+        foreach ($asset->getChildAssets() as $subAsset) {
             $this->entityManager->remove($subAsset, false);
         }
 

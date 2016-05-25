@@ -1,8 +1,10 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\Storage\Local;
+namespace KeylightUtilBundle\Services\Asset\Providers\Local;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
+use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
+use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
+use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
 
 class LocalAssetStorage implements AssetStorageInterface
 {
@@ -14,18 +16,12 @@ class LocalAssetStorage implements AssetStorageInterface
     private $basePath;
 
     /**
-     * @var string
-     */
-    private $subDir;
-
-    /**
      * @param string $baseDir
      * @param string $subDir
      */
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
-        $this->basePath = $baseDir . '/../web/';
-        $this->subDir = $subDir;
+        $this->basePath = $baseDir . '/../web' . $subDir;
     }
 
     /**
@@ -34,11 +30,7 @@ class LocalAssetStorage implements AssetStorageInterface
      */
     public function saveAsset(Asset $asset)
     {
-        if ($asset->getFile() !== null) {
-            file_put_contents($this->basePath . "/" . $this->subDir . $asset->getPath() . $asset->getFilename(), file_get_contents($asset->getFile()->getRealPath()));
-            
-            $asset->setPath('/' . $this->subDir);
-        }
+        $asset->getFile()->move($this->basePath . $asset->getPath(), $asset->getFilename());
 
         return true;
     }

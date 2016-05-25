@@ -2,7 +2,8 @@
 namespace KeylightUtilBundle\Entity\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\Groups;
 use KeylightUtilBundle\Entity\Asset;
 use Doctrine\ORM\Mapping as ORM;
 use KeylightUtilBundle\Model\Asset\AssetTypes;
@@ -50,7 +51,9 @@ trait AssetsTrait
     /**
      * @return array
      *
-     * @Serializer\VirtualProperty()
+     * @VirtualProperty()
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     public function getImages()
     {
@@ -60,7 +63,9 @@ trait AssetsTrait
     /**
      * @return array
      *
-     * @Serializer\VirtualProperty()
+     * @VirtualProperty()
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     public function getVideos()
     {
@@ -70,7 +75,9 @@ trait AssetsTrait
     /**
      * @return array
      *
-     * @Serializer\VirtualProperty()
+     * @VirtualProperty()
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
     public function getPdfs()
     {
@@ -80,9 +87,11 @@ trait AssetsTrait
     /**
      * @return array
      *
-     * @Serializer\VirtualProperty()
+     * @VirtualProperty()
+     *
+     * @Groups({"asset_list", "asset_details"})
      */
-    public function getAudio()
+    public function getAudios()
     {
         return $this->getAssetsByType(AssetTypes::AUDIO);
     }

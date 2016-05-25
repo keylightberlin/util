@@ -2,11 +2,10 @@
 namespace KeylightUtilBundle\Services\Asset\Providers\Local;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 
-class LocalAssetProvider implements AssetProviderInterface
+class LocalAssetProvider
 {
-    const UPLOADS_BASE_DIR = "uploads/";
+    const UPLOADS_BASE_DIR = "/uploads/";
 
     /**
      * @var string
@@ -14,24 +13,12 @@ class LocalAssetProvider implements AssetProviderInterface
     private $basePath;
 
     /**
-    * @var string
-    */
-    private $subDir;
-
-    /**
-     * @var string
-     */
-    private $baseDir;
-
-    /**
      * @param string $baseDir
      * @param string $subDir
      */
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
-        $this->basePath = $baseDir . '/../web/';
-        $this->subDir = $subDir;
-        $this->baseDir = $baseDir;
+        $this->basePath = $baseDir . '/../web' . $subDir;
     }
 
     /**
@@ -47,6 +34,6 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        return $asset->getRelativeUrl();
+        return static::UPLOADS_BASE_DIR . $asset->getRelativeUrl();
     }
 }
