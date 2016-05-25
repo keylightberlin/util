@@ -176,6 +176,7 @@ class Asset implements Translatable, AssetInterface
     public function __construct()
     {
         $this->childAssets = new ArrayCollection();
+        $this->storageType = AssetStorageTypes::PUBLIC_STORAGE;
     }
 
     /**

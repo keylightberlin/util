@@ -1,10 +1,8 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\Providers\Local;
+namespace KeylightUtilBundle\Services\Asset\Storage\Local;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
-use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
-use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class LocalAssetStorage implements AssetStorageInterface
 {

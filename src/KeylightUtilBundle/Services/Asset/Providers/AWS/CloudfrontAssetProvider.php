@@ -10,20 +10,43 @@ class CloudfrontAssetProvider implements AssetProviderInterface
     /**
      * @var string
      */
-    private $cloudfrontEndpoint;
+    private $publicCloudfrontEndpoint;
     /**
      * @var CloudFrontClient
      */
     private $cloudFrontClient;
+    /**
+     * @var string
+     */
+    private $privateCloudfrontEndpoint;
+    /**
+     * @var string
+     */
+    private $privateCloudfrontKey;
+    /**
+     * @var string
+     */
+    private $privateCloudfrontKeyPairId;
 
     /**
-     * @param string $cloudfrontEndpoint
+     * @param string $publicCloudfrontEndpoint
+     * @param string $privateCloudfrontEndpoint
      * @param CloudFrontClient $cloudFrontClient
+     * @param string $privateCloudfrontKey
+     * @param string $privateCloudfrontKeyPairId
      */
-    public function __construct($cloudfrontEndpoint, CloudFrontClient $cloudFrontClient)
-    {
-        $this->cloudfrontEndpoint = $cloudfrontEndpoint;
+    public function __construct(
+        $publicCloudfrontEndpoint,
+        $privateCloudfrontEndpoint,
+        CloudFrontClient $cloudFrontClient,
+        $privateCloudfrontKey,
+        $privateCloudfrontKeyPairId
+    ) {
+        $this->publicCloudfrontEndpoint = $publicCloudfrontEndpoint;
         $this->cloudFrontClient = $cloudFrontClient;
+        $this->privateCloudfrontEndpoint = $privateCloudfrontEndpoint;
+        $this->privateCloudfrontKey = $privateCloudfrontKey;
+        $this->privateCloudfrontKeyPairId = $privateCloudfrontKeyPairId;
     }
 
     /**
@@ -39,10 +62,23 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        $url = $this->cloudfrontEndpoint . "/" . $asset->getRelativeUrl();
+        if ($asset->isPrivateStorage()) {
+            $baseUrl = $this->privateCloudfrontEndpoint;
+        } else {
+            $baseUrl = $this->publicCloudfrontEndpoint;
+
+        }
+        $url = $baseUrl . "/" . $asset->getRelativeUrl();
 
         if ($asset->isPrivateStorage()) {
-            $url = $this->cloudFrontClient->getSignedUrl([ 'url' => $url, 'expires' => 60 ]);
+            $url = $this->cloudFrontClient->getSignedUrl(
+                [
+                    'url' => $url,
+                    'expires' => time() + 60,
+                    'key_pair_id' => $this->privateCloudfrontKeyPairId,
+                    'private_key' => $this->privateCloudfrontKey,
+                ]
+            );
         }
 
         return $url;

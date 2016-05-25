@@ -3,7 +3,7 @@ namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\AssetFactoryInterface;
-use KeylightUtilBundle\Services\Asset\Providers\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class ImageAssetHandler implements AssetHandlerInterface
 {
@@ -95,6 +95,8 @@ class ImageAssetHandler implements AssetHandlerInterface
             $childAsset->setProcessedType($requiredImage['name']);
             $childAsset->setHeight($newImage->getImageHeight());
             $childAsset->setWidth($newImage->getImageWidth());
+            $childAsset->setFileContents($newImage);
+
             $asset->addChildAsset($childAsset);
 
             $this->assetStorage->saveAsset($childAsset);

@@ -25,6 +25,8 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_s3_private_bucket', $config['aws']['s3_private_bucket']);
         $container->setParameter('keylight_util_s3_private_base_path', $config['aws']['s3_private_base_path']);
         $container->setParameter('keylight_util_cloudfront_private_endpoint', $config['aws']['cloudfront_private_endpoint']);
+        $container->setParameter('keylight_util_cloudfront_private_key', $config['aws']['cloudfront_private_key']);
+        $container->setParameter('keylight_util_cloudfront_private_key_pair_id', $config['aws']['cloudfront_private_key_pair_id']);
 
         $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
 

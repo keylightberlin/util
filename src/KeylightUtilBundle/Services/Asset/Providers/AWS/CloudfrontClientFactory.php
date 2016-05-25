@@ -36,7 +36,7 @@ class CloudfrontClientFactory
             [
                 'credentials' => $credentials,
                 'region' => 'eu-central-1',
-                'version' => '2009-09-09',
+                'version' => '2016-01-13',
             ]
         );
     }
