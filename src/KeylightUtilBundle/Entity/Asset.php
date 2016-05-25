@@ -11,10 +11,18 @@ use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
 use KeylightUtilBundle\Entity\Traits\ActiveTrait;
 use KeylightUtilBundle\Entity\Traits\IdTrait;
 use KeylightUtilBundle\Entity\Traits\TimestampableTrait;
+use KeylightUtilBundle\Model\Asset\AssetStorageTypes;
 use KeylightUtilBundle\Model\Asset\AssetTypes;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
+ * The Class to store all information about uploaded assets. If during upload, the assets are processed,
+ * the respective assets will be available as childAssets.
+ * The predefined serialization groups are
+ * - asset_list
+ * - asset_details
+ * - asset_children
+ *
  * @ORM\Entity(repositoryClass="KeylightUtilBundle\Entity\Repository\AssetRepository")
  * @ORM\Table(name="keylight_asset")
  * @ORM\HasLifecycleCallbacks()
@@ -109,11 +117,6 @@ class Asset implements Translatable, AssetInterface
     private $code;
 
     /**
-     * @var UploadedFile
-     */
-    private $uploadedFile;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="category", type="string", length=255, nullable=true)
@@ -123,17 +126,56 @@ class Asset implements Translatable, AssetInterface
     private $type;
 
     /**
+     * The name of the type, if it is a processed asset.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="processed_type", type="string", length=50, nullable=true)
+     *
+     * @Groups({"asset_list", "asset_details"})
+     */
+    private $processedType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="storage_type", type="string", length=10, nullable=true)
+     *
+     * @Exclude()
+     */
+    private $storageType;
+
+    /**
+     * @var Asset
+     *
+     * @ORM\ManyToOne(targetEntity="KeylightUtilBundle\Entity\Asset", inversedBy="childAssets")
+     *
+     * @Exclude()
+     */
+    private $parentAsset;
+
+    /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\SubAsset", mappedBy="asset", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="KeylightUtilBundle\Entity\Asset", mappedBy="parentAsset", cascade={"all"})
      *
-     * @Groups({"asset_details"})
+     * @Groups({"asset_children"})
      */
-    private $subAssets;
+    private $childAssets;
+
+    /**
+     * @var UploadedFile
+     */
+    private $file;
+
+    /**
+     * @var string
+     */
+    private $fileContents;
 
     public function __construct()
     {
-        $this->subAssets = new ArrayCollection();
+        $this->childAssets = new ArrayCollection();
     }
 
     /**
@@ -235,17 +277,17 @@ class Asset implements Translatable, AssetInterface
     /**
      * @return UploadedFile
      */
-    public function getUploadedFile()
+    public function getFile()
     {
-        return $this->uploadedFile;
+        return $this->file;
     }
 
     /**
-     * @param UploadedFile $uploadedFile
+     * @param UploadedFile $file
      */
-    public function setUploadedFile(UploadedFile $uploadedFile)
+    public function setFile(UploadedFile $file)
     {
-        $this->uploadedFile = $uploadedFile;
+        $this->file = $file;
     }
 
     /**
@@ -274,65 +316,57 @@ class Asset implements Translatable, AssetInterface
 
     /**
      * @param string $type
-     * @return SubAsset
+     * @return Asset
      */
-    public function getSubAssetByType($type)
+    public function getChildAssetByType($type)
     {
-        $foundSubAsset = null;
+        $foundChildAsset = null;
 
-        /** @var SubAsset $subAsset */
-        foreach ($this->subAssets as $subAsset) {
-            if ($subAsset->getType() === $type) {
-                $foundSubAsset = $subAsset;
+        /** @var Asset $childAsset */
+        foreach ($this->childAssets as $childAsset) {
+            if ($childAsset->getType() === $type) {
+                $foundChildAsset = $childAsset;
                 break;
             }
         }
 
-        return $foundSubAsset;
+        return $foundChildAsset;
     }
 
     /**
      * @param string $type
      * @return string
      */
-    public function getRelativeUrlForSubAssetType($type)
+    public function getRelativeUrlForChildAssetType($type)
     {
-        $foundSubAssetUrl = null;
+        $foundChildAsset = $this->getChildAssetByType($type);
 
-        /** @var SubAsset $subAsset */
-        foreach ($this->subAssets as $subAsset) {
-            if ($subAsset->getType() === $type) {
-                $foundSubAssetUrl = $subAsset->getRelativeUrl();
-                break;
-            }
-        }
-
-        return $foundSubAssetUrl;
+        return $foundChildAsset ? $foundChildAsset->getRelativeUrl() : null;
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getSubAssets()
+    public function getChildAssets()
     {
-        return $this->subAssets;
+        return $this->childAssets;
     }
 
     /**
-     * @param ArrayCollection $subAssets
+     * @param ArrayCollection $childAssets
      */
-    public function setSubAssets(ArrayCollection $subAssets)
+    public function setChildAssets(ArrayCollection $childAssets)
     {
-        $this->subAssets = $subAssets;
+        $this->childAssets = $childAssets;
     }
 
     /**
-     * @param SubAsset $subAsset
+     * @param Asset $childAsset
      */
-    public function addSubAsset(SubAsset $subAsset)
+    public function addChildAsset(Asset $childAsset)
     {
-        $subAsset->setAsset($this);
-        $this->subAssets->add($subAsset);
+        $childAsset->setParentAsset($this);
+        $this->childAssets->add($childAsset);
     }
 
     /**
@@ -406,5 +440,93 @@ class Asset implements Translatable, AssetInterface
     public function isNotEmpty()
     {
         return false === $this->isEmpty();
+    }
+
+    /**
+     * @return Asset
+     */
+    public function getParentAsset()
+    {
+        return $this->parentAsset;
+    }
+
+    /**
+     * @param Asset $parentAsset
+     */
+    public function setParentAsset(Asset $parentAsset)
+    {
+        $this->parentAsset = $parentAsset;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isChildAsset()
+    {
+        return $this->parentAsset !== null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorageType()
+    {
+        return $this->storageType;
+    }
+
+    /**
+     * @param string $storageType
+     */
+    public function setStorageType($storageType)
+    {
+        $this->storageType = $storageType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublicStorage()
+    {
+        return $this->storageType === AssetStorageTypes::PUBLIC_STORAGE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivateStorage()
+    {
+        return $this->storageType === AssetStorageTypes::PRIVATE_STORAGE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessedType()
+    {
+        return $this->processedType;
+    }
+
+    /**
+     * @param string $processedType
+     */
+    public function setProcessedType($processedType)
+    {
+        $this->processedType = $processedType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileContents()
+    {
+        return $this->fileContents;
+    }
+
+    /**
+     * @param string $fileContents
+     */
+    public function setFileContents($fileContents)
+    {
+        $this->fileContents = $fileContents;
     }
 }

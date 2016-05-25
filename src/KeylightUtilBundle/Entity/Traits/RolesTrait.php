@@ -26,6 +26,7 @@ trait RolesTrait
 
     /**
      * @param string $role
+     * @return bool
      */
     public function hasRole($role)
     {

@@ -2,34 +2,34 @@ services:
     keylight_entity_manager:
         class: KeylightUtilBundle\Services\EntityManager\EntityManager
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
     keylight_twig_extension:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
-            - @keylight_string_formatter
-            - @keylight_util_asset_provider
+            - "@keylight_string_formatter"
+            - "@keylight_util_asset_provider"
         public: false
         tags:
             - { name: twig.extension }
     keylight_string_formatter:
         class: KeylightUtilBundle\Services\String\StringFormatter
         arguments:
-            - %locale%
+            - "%locale%"
     keylight_mailer:
         class: KeylightUtilBundle\Services\Mailer\MailerService
         arguments:
-            - @mailer
-            - %keylight_util_sender_address%
+            - "@mailer"
+            - "%keylight_util_sender_address%"
     keylight_s3_client_factory:
-        class: KeylightUtilBundle\Services\Asset\AWS\S3ClientFactory
+        class: KeylightUtilBundle\Services\Asset\Storage\AWS\S3ClientFactory
         arguments:
-            - %keylight_util_s3_access_key_id%
-            - %keylight_util_s3_secret_access_key%
+            - "%keylight_util_s3_access_key_id%"
+            - "%keylight_util_s3_secret_access_key%"
     keylight_s3_client:
         class: Aws\S3\S3Client
         factory: keylight_s3_client_factory:getInstance
     keylight_s3_uploader:
-        class: KeylightUtilBundle\Services\Asset\AWS\S3Uploader
+        class: KeylightUtilBundle\Services\Asset\Storage\AWS\S3Uploader
         arguments:
             - @keylight_s3_client
             - %keylight_util_s3_bucket%
