@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Entity\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\Groups;
 use KeylightUtilBundle\Entity\Asset;
