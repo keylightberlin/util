@@ -57,6 +57,11 @@ services:
         arguments:
             - "%kernel.root_dir%"
             - "uploads"
+    keylight_local_asset_provider:
+        class: KeylightUtilBundle\Services\Asset\Providers\Local\LocalAssetProvider
+        arguments:
+            - "%kernel.root_dir%"
+            - "uploads"
     keylight_asset_manager:
         class: KeylightUtilBundle\Services\Asset\AssetManager
     keylight_generic_asset_handler:
