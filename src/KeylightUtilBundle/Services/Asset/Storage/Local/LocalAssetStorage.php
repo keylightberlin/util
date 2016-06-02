@@ -14,12 +14,18 @@ class LocalAssetStorage implements AssetStorageInterface
     private $basePath;
 
     /**
+     * @var string
+     */
+    private $subdir;
+
+    /**
      * @param string $baseDir
      * @param string $subDir
      */
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
         $this->basePath = $baseDir . '/../web/' . $subDir;
+        $this->subdir = $subDir;
     }
 
     /**

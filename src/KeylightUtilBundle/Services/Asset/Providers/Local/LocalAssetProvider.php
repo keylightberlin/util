@@ -14,12 +14,18 @@ class LocalAssetProvider implements AssetProviderInterface
     private $basePath;
 
     /**
+    * @var string
+    */
+    private $subdir;
+
+    /**
      * @param string $baseDir
      * @param string $subDir
      */
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
         $this->basePath = $baseDir . '/../web/' . $subDir;
+        $this->subdir = $subDir;
     }
 
     /**
@@ -35,6 +41,6 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        return static::UPLOADS_BASE_DIR . $asset->getRelativeUrl();
+        return $this->subdir . $asset->getRelativeUrl();
     }
 }
