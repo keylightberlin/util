@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('asset')
                         ->children()
                             ->scalarNode('storage')->defaultValue('aws')->end() // or local
+                            ->scalarNode('storage_subdir')->defaultValue('uploads/')->end()
                             ->arrayNode('images')
                                 ->defaultValue([])
                                 ->prototype('array')
