@@ -1,5 +1,5 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\AWS;
+namespace KeylightUtilBundle\Services\Asset\Storage\AWS;
 
 use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;

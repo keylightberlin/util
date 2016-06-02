@@ -1,10 +1,9 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
+namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Entity\SubAsset;
-use KeylightUtilBundle\Model\Asset\AssetTypes;
-use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\AssetFactoryInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class ImageAssetHandler implements AssetHandlerInterface
 {
@@ -16,15 +15,24 @@ class ImageAssetHandler implements AssetHandlerInterface
      * @var AssetStorageInterface
      */
     private $assetStorage;
+    /**
+     * @var AssetFactoryInterface
+     */
+    private $assetFactory;
 
     /**
      * @param AssetStorageInterface $assetStorage
+     * @param AssetFactoryInterface $assetFactory
      * @param array $requiredImages
      */
-    public function __construct(AssetStorageInterface $assetStorage, array $requiredImages)
-    {
+    public function __construct(
+        AssetStorageInterface $assetStorage,
+        AssetFactoryInterface $assetFactory,
+        array $requiredImages
+    ) {
         $this->requiredImages = $requiredImages;
         $this->assetStorage = $assetStorage;
+        $this->assetFactory = $assetFactory;
     }
 
     /**
@@ -33,13 +41,13 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
-        $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
+        $newImage = new \Imagick($asset->getFile()->getRealPath());
         $asset->setHeight($newImage->getImageHeight());
         $asset->setWidth($newImage->getImageWidth());
 
         /** @var array $requiredImage */
         foreach ($this->requiredImages as $requiredImage) {
-            $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
+            $newImage = new \Imagick($asset->getFile()->getRealPath());
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME)
                 . '-'
                 . $requiredImage['name']
@@ -80,24 +88,27 @@ class ImageAssetHandler implements AssetHandlerInterface
              * $newImage->stripImage();
              * $newImage->setImageOrientation($orientation);
              */
+            $childAsset = $this->assetFactory->getInstance();
+            $childAsset->setStorageType($asset->getStorageType());
+            $childAsset->setType($asset->getType());
+            $childAsset->setFilename($newFilename);
+            $childAsset->setProcessedType($requiredImage['name']);
+            $childAsset->setHeight($newImage->getImageHeight());
+            $childAsset->setWidth($newImage->getImageWidth());
+            $childAsset->setFileContents($newImage);
 
-            $this->assetStorage->uploadFile($newFilename, $newImage);
+            $asset->addChildAsset($childAsset);
 
-            $subAsset = new SubAsset();
-            $subAsset->setFilename($newFilename);
-            $subAsset->setType($requiredImage['name']);
-            $subAsset->setHeight($newImage->getImageHeight());
-            $subAsset->setWidth($newImage->getImageWidth());
-            $asset->addSubAsset($subAsset);
+            $this->assetStorage->saveAsset($childAsset);
         }
     }
 
     /**
      * @param $asset
      */
-    public function handleRemove($asset)
+    public function handleRemove(Asset $asset)
     {
-        // TODO: Implement handleRemove() method.
+        // Get handled by generic handler already.
     }
 
     /**

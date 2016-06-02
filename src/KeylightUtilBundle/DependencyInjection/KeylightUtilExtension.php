@@ -19,18 +19,23 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_sender_address', $config['email']['sender_address']);
         $container->setParameter('keylight_util_s3_access_key_id', $config['aws']['s3_access_key_id']);
         $container->setParameter('keylight_util_s3_secret_access_key', $config['aws']['s3_secret_access_key']);
-        $container->setParameter('keylight_util_s3_bucket', $config['aws']['s3_bucket']);
-        $container->setParameter('keylight_util_s3_base_path', $config['aws']['s3_base_path']);
-        $container->setParameter('keylight_util_cloudfront_endpoint', $config['aws']['cloudfront_endpoint']);
+        $container->setParameter('keylight_util_s3_public_bucket', $config['aws']['s3_public_bucket']);
+        $container->setParameter('keylight_util_s3_public_base_path', $config['aws']['s3_public_base_path']);
+        $container->setParameter('keylight_util_cloudfront_public_endpoint', $config['aws']['cloudfront_public_endpoint']);
+        $container->setParameter('keylight_util_s3_private_bucket', $config['aws']['s3_private_bucket']);
+        $container->setParameter('keylight_util_s3_private_base_path', $config['aws']['s3_private_base_path']);
+        $container->setParameter('keylight_util_cloudfront_private_endpoint', $config['aws']['cloudfront_private_endpoint']);
+        $container->setParameter('keylight_util_cloudfront_private_key', $config['aws']['cloudfront_private_key']);
+        $container->setParameter('keylight_util_cloudfront_private_key_pair_id', $config['aws']['cloudfront_private_key_pair_id']);
 
         $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
 
-        if ($config['asset']['storage_type'] === 'aws') {
+        if ($config['asset']['storage'] === 'aws') {
             $container->setAlias('keylight_util_asset_storage', 'keylight_s3_uploader');
             $container->setAlias('keylight_util_asset_provider', 'keylight_cloudfront_asset_provider');
         } else {
             $container->setAlias('keylight_util_asset_storage', 'keylight_local_asset_storage');
-            $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_storage');
+            $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_provider');
         }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

@@ -2,7 +2,7 @@
 namespace KeylightUtilBundle\Services\Asset;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Services\Asset\AssetHandlers\AssetHandlerInterface;
+use KeylightUtilBundle\Services\Asset\Handlers\AssetHandlerInterface;
 
 class AssetManager implements AssetManagerInterface
 {

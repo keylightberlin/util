@@ -2,76 +2,94 @@ services:
     keylight_entity_manager:
         class: KeylightUtilBundle\Services\EntityManager\EntityManager
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
     keylight_twig_extension:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
-            - @keylight_string_formatter
-            - @keylight_util_asset_provider
+            - "@keylight_string_formatter"
+            - "@keylight_util_asset_provider"
         public: false
         tags:
             - { name: twig.extension }
     keylight_string_formatter:
         class: KeylightUtilBundle\Services\String\StringFormatter
         arguments:
-            - %locale%
+            - "%locale%"
     keylight_mailer:
         class: KeylightUtilBundle\Services\Mailer\MailerService
         arguments:
-            - @mailer
-            - %keylight_util_sender_address%
+            - "@mailer"
+            - "%keylight_util_sender_address%"
     keylight_s3_client_factory:
-        class: KeylightUtilBundle\Services\Asset\AWS\S3ClientFactory
+        class: KeylightUtilBundle\Services\Asset\Storage\AWS\S3ClientFactory
         arguments:
-            - %keylight_util_s3_access_key_id%
-            - %keylight_util_s3_secret_access_key%
+            - "%keylight_util_s3_access_key_id%"
+            - "%keylight_util_s3_secret_access_key%"
     keylight_s3_client:
         class: Aws\S3\S3Client
         factory: keylight_s3_client_factory:getInstance
+    keylight_cloudfront_client_factory:
+        class: KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontClientFactory
+        arguments:
+            - "%keylight_util_s3_access_key_id%"
+            - "%keylight_util_s3_secret_access_key%"
+    keylight_cloudfront_client:
+        class: Aws\CloudFront\CloudFrontClient
+        factory: keylight_cloudfront_client_factory:getInstance
     keylight_s3_uploader:
-        class: KeylightUtilBundle\Services\Asset\AWS\S3Uploader
+        class: KeylightUtilBundle\Services\Asset\Storage\AWS\S3Uploader
         arguments:
-            - @keylight_s3_client
-            - %keylight_util_s3_bucket%
-            - %keylight_util_s3_base_path%
+            - "@keylight_s3_client"
+            - "%keylight_util_s3_public_bucket%"
+            - "%keylight_util_s3_public_base_path%"
+            - "%keylight_util_s3_private_bucket%"
+            - "%keylight_util_s3_private_base_path%"
     keylight_cloudfront_asset_provider:
-        class: KeylightUtilBundle\Services\Asset\AWS\CloudfrontAssetProvider
+        class: KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontAssetProvider
         arguments:
-            - %keylight_util_cloudfront_endpoint%
+            - "%keylight_util_cloudfront_public_endpoint%"
+            - "%keylight_util_cloudfront_private_endpoint%"
+            - "@keylight_cloudfront_client"
+            - "%keylight_util_cloudfront_private_key%"
+            - "%keylight_util_cloudfront_private_key_pair_id%"
     keylight_local_asset_storage:
-        class: KeylightUtilBundle\Services\Asset\Local\LocalAssetStorage
+        class: KeylightUtilBundle\Services\Asset\Storage\Local\LocalAssetStorage
         arguments:
-            - %kernel.root_dir%
+            - "%kernel.root_dir%"
+            - "uploads"
     keylight_asset_manager:
         class: KeylightUtilBundle\Services\Asset\AssetManager
     keylight_generic_asset_handler:
-        class: KeylightUtilBundle\Services\Asset\AssetHandlers\GenericAssetHandler
+        class: KeylightUtilBundle\Services\Asset\Handlers\GenericAssetHandler
         arguments:
-            - @keylight_util_asset_storage
-            - @keylight_entity_manager
+            - "@keylight_util_asset_storage"
+            - "@keylight_entity_manager"
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 255 }
     keylight_image_asset_handler:
-        class: KeylightUtilBundle\Services\Asset\AssetHandlers\ImageAssetHandler
+        class: KeylightUtilBundle\Services\Asset\Handlers\ImageAssetHandler
         arguments:
-            - @keylight_util_asset_storage
-            - %keylight_util_asset_images%
+            - "@keylight_util_asset_storage"
+            - "@keylight_asset_factory"
+            - "%keylight_util_asset_images%"
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 50 }
     keylight_asset_sanitizer:
         class: KeylightUtilBundle\Services\Asset\AssetSanitizer
         arguments:
-            - @keylight_asset_repository
-            - @keylight_util_asset_provider
-            - @keylight_asset_manager
-            - @keylight_entity_manager
+            - "@keylight_asset_repository"
+            - "@keylight_util_asset_provider"
+            - "@keylight_asset_manager"
+            - "@keylight_entity_manager"
     keylight_asset_repository:
-        class: Doctrine\ORM\EntityManager
+        class: KeylightUtilBundle\Entity\Repository\AssetRepository
         factory: doctrine.orm.entity_manager:getRepository
         arguments:
             - "KeylightUtilBundle:Asset"
+    keylight_asset_factory:
+        class: KeylightUtilBundle\Services\Asset\AssetFactory
     keylight_random_string_util:
         class: KeylightUtilBundle\Services\String\RandomStringUtil
     keylight_uuid_provider:
