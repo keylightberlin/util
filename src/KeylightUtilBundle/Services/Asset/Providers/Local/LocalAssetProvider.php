@@ -6,7 +6,7 @@ use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 
 class LocalAssetProvider implements AssetProviderInterface
 {
-    const UPLOADS_BASE_DIR = "/uploads/";
+    const UPLOADS_BASE_DIR = "uploads/";
 
     /**
      * @var string
@@ -16,7 +16,12 @@ class LocalAssetProvider implements AssetProviderInterface
     /**
     * @var string
     */
-    private $subdir;
+    private $subDir;
+
+    /**
+     * @var string
+     */
+    private $baseDir;
 
     /**
      * @param string $baseDir
@@ -25,7 +30,8 @@ class LocalAssetProvider implements AssetProviderInterface
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
         $this->basePath = $baseDir . '/../web/' . $subDir;
-        $this->subdir = $subDir;
+        $this->subDir = $subDir;
+        $this->baseDir = $baseDir;
     }
 
     /**
@@ -33,7 +39,7 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getFileForAsset(Asset $asset)
     {
-        return file_get_contents($this->basePath . '/' . $asset->getRelativeUrl());
+        return file_get_contents($this->basePath . $asset->getRelativeUrl());
     }
 
     /**
@@ -41,6 +47,6 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        return $this->subdir . $asset->getRelativeUrl();
+        return $this->baseDir . '/../../../../' . $this->subDir .  $asset->getRelativeUrl();
     }
 }
