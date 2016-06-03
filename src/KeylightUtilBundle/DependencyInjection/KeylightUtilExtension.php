@@ -29,6 +29,7 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_cloudfront_private_key_pair_id', $config['aws']['cloudfront_private_key_pair_id']);
 
         $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
+        $container->setParameter('keylight_util_local_storage_subdir', $config['asset']['local_storage_subdir']);
 
         if ($config['asset']['storage'] === 'aws') {
             $container->setAlias('keylight_util_asset_storage', 'keylight_s3_uploader');
