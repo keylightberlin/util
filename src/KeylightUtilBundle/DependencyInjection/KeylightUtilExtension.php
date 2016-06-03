@@ -33,9 +33,11 @@ class KeylightUtilExtension extends Extension
         if ($config['asset']['storage'] === 'aws') {
             $container->setAlias('keylight_util_asset_storage', 'keylight_s3_uploader');
             $container->setAlias('keylight_util_asset_provider', 'keylight_cloudfront_asset_provider');
-        } else {
+        } elseif ($config['asset']['storage'] === 'local') {
             $container->setAlias('keylight_util_asset_storage', 'keylight_local_asset_storage');
             $container->setAlias('keylight_util_asset_provider', 'keylight_local_asset_provider');
+        } else {
+            throw new \Exception("Unknown asset provider");
         }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
