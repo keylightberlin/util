@@ -16,7 +16,7 @@ class LocalAssetStorage implements AssetStorageInterface
     /**
      * @var string
      */
-    private $subdir;
+    private $subDir;
 
     /**
      * @param string $baseDir
@@ -25,7 +25,7 @@ class LocalAssetStorage implements AssetStorageInterface
     public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
     {
         $this->basePath = $baseDir . '/../web/' . $subDir;
-        $this->subdir = $subDir;
+        $this->subDir = $subDir;
     }
 
     /**
@@ -34,7 +34,7 @@ class LocalAssetStorage implements AssetStorageInterface
      */
     public function saveAsset(Asset $asset)
     {
-        if($asset->getFile()!== null) {
+        if ($asset->getFile()!== null) {
             file_put_contents($this->basePath . "/" . $asset->getPath() . $asset->getFilename(), file_get_contents($asset->getFile()->getRealPath()));
         }
 
@@ -56,6 +56,6 @@ class LocalAssetStorage implements AssetStorageInterface
      */
     public function removeAsset(Asset $asset)
     {
-        unlink($this->basePath . '/' . $asset->getRelativeUrl());
+        unlink($this->basePath . $asset->getRelativeUrl());
     }
 }
