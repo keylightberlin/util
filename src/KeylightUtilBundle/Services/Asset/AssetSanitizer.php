@@ -69,12 +69,16 @@ class AssetSanitizer
     {
         $this->clearSubAssets($asset);
         $assetOriginalFilename =  $this->assetProviderInterface->getUrlForAsset($asset);
-        $file = file_get_contents($assetOriginalFilename);
-        $localName = "/tmp/" . uniqid();
-        file_put_contents($localName, $file);
-        $asset->setFile(new UploadedFile($localName, $asset->getOriginalFileName()));
-        $this->assetManager->saveAsset($asset);
-        exec("rm " . $localName);
+        try {
+            $file = file_get_contents($assetOriginalFilename);
+            $localName = "/tmp/" . uniqid();
+            file_put_contents($localName, $file);
+            $asset->setFile(new UploadedFile($localName, $asset->getOriginalFileName()));
+            $this->assetManager->saveAsset($asset);
+            exec("rm " . $localName);
+        } catch (\Exception $e) {
+            echo "Skipping";
+        }
     }
 
     /**
