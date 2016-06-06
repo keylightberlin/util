@@ -36,6 +36,7 @@ class ImageAssetHandler implements AssetHandlerInterface
         $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
         $asset->setHeight($newImage->getImageHeight());
         $asset->setWidth($newImage->getImageWidth());
+        $orientation = $newImage->getImageOrientation();
 
         /** @var array $requiredImage */
         foreach ($this->requiredImages as $requiredImage) {
@@ -49,11 +50,11 @@ class ImageAssetHandler implements AssetHandlerInterface
             $imageWidth = $newImage->getImageWidth();
             $imageHeight = $newImage->getImageHeight();
             $isLandscapeFormat = $imageWidth > $imageHeight;
-            $orientation = $newImage->getImageOrientation();
 
-            $newImage->setCompression(\Imagick::COMPRESSION_JPEG);
+            $newImage->setImageCompression(\Imagick::COMPRESSION_JPEG);
             $newImage->setImageCompressionQuality($requiredImage['quality']);
-
+            $newImage->setImageOrientation($orientation);
+            
             if ($isLandscapeFormat) {
                 $desiredWidth = $requiredImage['long'];
                 $newImage->resizeImage($desiredWidth, 0, \Imagick::FILTER_LANCZOS, 1);
@@ -77,10 +78,9 @@ class ImageAssetHandler implements AssetHandlerInterface
             /**
              * This unfortunately kills the orientation. Leave EXIF-Info for now.
              *
-             * $newImage->stripImage();
              * $newImage->setImageOrientation($orientation);
              */
-
+            $newImage->stripImage();
             $this->assetStorage->uploadFile($newFilename, $newImage);
 
             $subAsset = new SubAsset();
