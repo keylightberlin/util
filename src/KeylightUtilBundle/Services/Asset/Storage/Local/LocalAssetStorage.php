@@ -48,16 +48,6 @@ class LocalAssetStorage implements AssetStorageInterface
         return true;
     }
 
-   /* /**
-     * @param string $fileName
-     * @param string $fileContents
-     * @return mixed
-     */
-    /*public function saveFile($fileName, $fileContents)
-    {
-        file_put_contents($this->basePath . $fileName, $fileContents);
-    }*/
-
     /**
      * @param Asset $asset
      */
