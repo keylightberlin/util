@@ -6,7 +6,7 @@ use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class LocalAssetStorage implements AssetStorageInterface
 {
-    const UPLOADS_BASE_DIR = "/uploads/";
+    const UPLOADS_BASE_DIR = "uploads/";
 
     /**
      * @var string
@@ -34,23 +34,29 @@ class LocalAssetStorage implements AssetStorageInterface
      */
     public function saveAsset(Asset $asset)
     {
-        if ($asset->getFile()!== null) {
-            file_put_contents($this->basePath . "/" . $this->subDir . $asset->getPath() . $asset->getFilename(), file_get_contents($asset->getFile()->getRealPath()));
+        if($asset->isPrivateStorage()) {
+            $this->subDir .= 'private/';
+        }
+
+        $basePath = $this->basePath . "/" . $this->subDir;
+
+        if ($asset->getFile() !== null) {
+            file_put_contents($basePath .  $asset->getPath() . $asset->getFilename(), file_get_contents($asset->getFile()->getRealPath()));
             $asset->setPath('/' . $this->subDir);
         }
 
         return true;
     }
 
-    /**
+   /* /**
      * @param string $fileName
      * @param string $fileContents
      * @return mixed
      */
-    public function saveFile($fileName, $fileContents)
+    /*public function saveFile($fileName, $fileContents)
     {
         file_put_contents($this->basePath . $fileName, $fileContents);
-    }
+    }*/
 
     /**
      * @param Asset $asset
