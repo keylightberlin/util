@@ -31,6 +31,30 @@ trait FilterTrait
 
     /**
      * @param QueryBuilder $queryBuilder
+     * @param string $name1
+     * @param string $name2
+     * @param string $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addLikeOrFilter(QueryBuilder $queryBuilder, $name1, $name2, $value)
+    {
+        if ($value != null) {
+            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
+
+            $queryBuilder
+                ->andWhere(
+                    $name1 . " LIKE :" . $randomPlaceholder
+                    . " OR " . $name2 . " LIKE :" . $randomPlaceholder
+                )
+                ->setParameter($randomPlaceholder, "%" . $value . "%");
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
      * @param string $name
      * @param string $value
      *

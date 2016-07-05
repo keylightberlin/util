@@ -1,0 +1,1 @@
+0 4 0 0 0 ./backup-database.sh -u getlocal_prod -p lkhf9383902rui0efsfdsj -d getlocal_prod -h getlocal-database.cem0nrdk8igj.eu-central-1.rds.amazonaws.com
