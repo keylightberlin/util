@@ -33,9 +33,9 @@ class GenericAssetHandler implements AssetHandlerInterface
     public function handleSave(Asset $asset)
     {
         /** @var Asset $asset */
-        foreach ($asset->getChildAssets() as $asset) {
-            $this->entityManager->remove($asset, false);
-            $this->assetStorage->removeAsset($asset);
+        foreach ($asset->getChildAssets() as $subAsset) {
+            $this->entityManager->remove($subAsset, false);
+            $this->assetStorage->removeAsset($subAsset);
         }
         $this->entityManager->flush();
 
