@@ -321,7 +321,7 @@ class Asset implements Translatable, AssetInterface
      */
     public function getChildAssetByType($type)
     {
-        $foundChildAsset = null;
+        $foundChildAsset = $this;
 
         /** @var Asset $childAsset */
         foreach ($this->childAssets as $childAsset) {
