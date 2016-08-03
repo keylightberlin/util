@@ -100,5 +100,5 @@ services:
     keylight_uuid_provider:
         class: KeylightUtilBundle\Services\Uuid\UuidProvider
         arguments:
-            - @keylight_entity_manager
-            - @keylight_random_string_util
+            - "@keylight_entity_manager"
+            - "@keylight_random_string_util"
