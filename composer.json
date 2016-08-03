@@ -9,11 +9,6 @@
   ],
   "require": {
     "php": ">=5.5",
-    "symfony/symfony": "~2.7",
-    "symfony/yaml": "~2.7",
-    "doctrine/common": ">=2.2,<3.0",
-    "doctrine/orm": "^2.4.8",
-    "symfony/swiftmailer-bundle": "~2.3",
     "aws/aws-sdk-php": "^3.13",
     "jms/serializer-bundle": "^1.1",
     "stof/doctrine-extensions-bundle": "^1.2"
