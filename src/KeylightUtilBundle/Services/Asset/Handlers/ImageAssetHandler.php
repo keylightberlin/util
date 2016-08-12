@@ -4,6 +4,7 @@ namespace KeylightUtilBundle\Services\Asset\Handlers;
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\AssetFactoryInterface;
 use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageAssetHandler implements AssetHandlerInterface
 {
@@ -41,14 +42,14 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
-        $newImage = new \Imagick($asset->getFile()->getRealPath());
+        $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
         $asset->setHeight($newImage->getImageHeight());
         $asset->setWidth($newImage->getImageWidth());
         $orientation = $newImage->getImageOrientation();
 
         /** @var array $requiredImage */
         foreach ($this->requiredImages as $requiredImage) {
-            $newImage = new \Imagick($asset->getFile()->getRealPath());
+            $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME)
                 . '-'
                 . $requiredImage['name']
@@ -94,7 +95,6 @@ class ImageAssetHandler implements AssetHandlerInterface
             $childAsset->setFileContents($newImage);
 
             $asset->addChildAsset($childAsset);
-
             $this->assetStorage->saveAsset($childAsset);
         }
     }

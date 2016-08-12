@@ -166,7 +166,7 @@ class Asset implements Translatable, AssetInterface
     /**
      * @var UploadedFile
      */
-    private $file;
+    private $uploadedFile;
 
     /**
      * @var string
@@ -278,17 +278,17 @@ class Asset implements Translatable, AssetInterface
     /**
      * @return UploadedFile
      */
-    public function getFile()
+    public function getUploadedFile()
     {
-        return $this->file;
+        return $this->uploadedFile;
     }
 
     /**
-     * @param UploadedFile $file
+     * @param UploadedFile $uploadedFile
      */
-    public function setFile(UploadedFile $file)
+    public function setUploadedFile(UploadedFile $uploadedFile)
     {
-        $this->file = $file;
+        $this->uploadedFile = $uploadedFile;
     }
 
     /**
@@ -494,9 +494,9 @@ class Asset implements Translatable, AssetInterface
     /**
      * @return bool
      */
-    public function isPrivateStorage()
+    public function isSecureStorage()
     {
-        return $this->storageType === AssetStorageTypes::PRIVATE_STORAGE;
+        return $this->storageType === AssetStorageTypes::SECURE_STORAGE;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace KeylightUtilBundle\Services\Asset\Handlers;
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 use KeylightUtilBundle\Services\EntityManager\EntityManager;
+use League\Flysystem\Filesystem;
 
 class GenericAssetHandler implements AssetHandlerInterface
 {
@@ -15,7 +16,6 @@ class GenericAssetHandler implements AssetHandlerInterface
      * @var EntityManager
      */
     private $entityManager;
-
     /**
      * @param AssetStorageInterface $assetStorage
      * @param EntityManager $entityManager
@@ -25,7 +25,6 @@ class GenericAssetHandler implements AssetHandlerInterface
         $this->assetStorage = $assetStorage;
         $this->entityManager = $entityManager;
     }
-
     /**
      * @param Asset $asset
      * @return string
@@ -38,17 +37,16 @@ class GenericAssetHandler implements AssetHandlerInterface
             $this->assetStorage->removeAsset($subAsset);
         }
         $this->entityManager->flush();
-
         /** If it's the same field, skip initializing and uploading it. */
-        if ($asset->getOriginalFileName() !== $asset->getFile()->getClientOriginalName()) {
-            $asset->setOriginalFileName($asset->getFile()->getClientOriginalName());
-            $ext = $asset->getFile()->guessExtension();
+        if ($asset->getOriginalFileName() !== $asset->getUploadedFile()->getClientOriginalName()) {
+            $asset->setPath("");
+            $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());
+            $ext = $asset->getUploadedFile()->guessExtension();
             $asset->setProcessedType("original");
             $asset->setFileType($ext);
             $key = substr(sha1(uniqid()), 0, 15);
             $newFilename = $key . "." . $ext;
             $asset->setFilename($newFilename);
-
             $this->assetStorage->saveAsset($asset);
         }
     }

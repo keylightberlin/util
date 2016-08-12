@@ -5,5 +5,5 @@ final class AssetStorageTypes
 {
     const PUBLIC_STORAGE = "public";
 
-    const PRIVATE_STORAGE = "private";
+    const SECURE_STORAGE = "private";
 }

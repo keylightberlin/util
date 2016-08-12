@@ -3,35 +3,22 @@ namespace KeylightUtilBundle\Services\Asset\Providers\Local;
 
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
 class LocalAssetProvider implements AssetProviderInterface
 {
-    const UPLOADS_BASE_DIR = "uploads/";
-
     /**
-     * @var string
+     * @var Filesystem
      */
-    private $basePath;
+    private $filesystem;
 
     /**
-    * @var string
-    */
-    private $subDir;
-
-    /**
-     * @var string
+     * @param Filesystem $filesystem
      */
-    private $baseDir;
-
-    /**
-     * @param string $baseDir
-     * @param string $subDir
-     */
-    public function __construct($baseDir, $subDir = self::UPLOADS_BASE_DIR)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->basePath = $baseDir . '/../web/';
-        $this->subDir = $subDir;
-        $this->baseDir = $baseDir;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -39,7 +26,10 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getFileForAsset(Asset $asset)
     {
-        return file_get_contents($this->basePath . $asset->getRelativeUrl());
+        /** @var Local $localAdapter */
+        $localAdapter = $this->filesystem->getAdapter();
+
+        return file_get_contents($localAdapter->getPathPrefix() . $this->getUrlForAsset($asset));
     }
 
     /**
@@ -48,5 +38,14 @@ class LocalAssetProvider implements AssetProviderInterface
     public function getUrlForAsset(Asset $asset)
     {
         return $asset->getRelativeUrl();
+    }
+
+    /**
+     * @param Filesystem $filesystem
+     * @return boolean
+     */
+    public function supportsFilesystem(Filesystem $filesystem)
+    {
+        return get_class($filesystem->getAdapter()) === Local::class;
     }
 }

@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle;
 
 use KeylightUtilBundle\DependencyInjection\CompilerPasses\AssetHandlerCompilerPass;
+use KeylightUtilBundle\DependencyInjection\CompilerPasses\AssetProviderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -12,5 +13,6 @@ class KeylightUtilBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new AssetHandlerCompilerPass());
+        $container->addCompilerPass(new AssetProviderCompilerPass());
     }
 }
