@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Asset\Providers;
 
 use KeylightUtilBundle\Entity\Asset;
+use League\Flysystem\Filesystem;
 
 interface AssetProviderInterface
 {
@@ -16,4 +17,10 @@ interface AssetProviderInterface
      * @return string
      */
     public function getUrlForAsset(Asset $asset);
+
+    /**
+     * @param Filesystem $filesystem
+     * @return boolean
+     */
+    public function supportsFilesystem(Filesystem $filesystem);
 }

@@ -4,6 +4,8 @@ namespace KeylightUtilBundle\Services\Asset\Providers\AWS;
 use Aws\CloudFront\CloudFrontClient;
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Filesystem;
 
 class CloudfrontAssetProvider implements AssetProviderInterface
 {
@@ -62,19 +64,19 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        if ($asset->isPrivateStorage()) {
+        if ($asset->isSecureStorage()) {
             $baseUrl = $this->privateCloudfrontEndpoint;
         } else {
             $baseUrl = $this->publicCloudfrontEndpoint;
-
         }
+        
         $url = $baseUrl . "/" . $asset->getRelativeUrl();
 
-        if ($asset->isPrivateStorage()) {
+        if ($asset->isSecureStorage()) {
             $url = $this->cloudFrontClient->getSignedUrl(
                 [
                     'url' => $url,
-                    'expires' => time() + 60,
+                    'expires' => time() + 300,
                     'key_pair_id' => $this->privateCloudfrontKeyPairId,
                     'private_key' => $this->privateCloudfrontKey,
                 ]
@@ -82,5 +84,14 @@ class CloudfrontAssetProvider implements AssetProviderInterface
         }
 
         return $url;
+    }
+
+    /**
+     * @param Filesystem $filesystem
+     * @return boolean
+     */
+    public function supportsFilesystem(Filesystem $filesystem)
+    {
+        return get_class($filesystem->getAdapter()) === AwsS3Adapter::class;
     }
 }
