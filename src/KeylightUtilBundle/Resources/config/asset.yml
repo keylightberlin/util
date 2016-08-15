@@ -1,0 +1,64 @@
+services:
+    keylight_util_asset_manager:
+        class: KeylightUtilBundle\Services\Asset\AssetManager
+    keylight_util_generic_asset_handler:
+        class: KeylightUtilBundle\Services\Asset\Handlers\GenericAssetHandler
+        arguments:
+            - "@keylight_util_asset_storage"
+            - "@keylight_util_entity_manager"
+        public: false
+        tags:
+            - { name: keylight.asset_handler, priority: 255 }
+    keylight_util_image_asset_handler:
+        class: KeylightUtilBundle\Services\Asset\Handlers\ImageAssetHandler
+        arguments:
+            - "@keylight_util_asset_storage"
+            - "@keylight_util_asset_factory"
+            - "%keylight_util_asset_images%"
+        public: false
+        tags:
+            - { name: keylight.asset_handler, priority: 50 }
+    keylight_util_asset_sanitizer:
+        class: KeylightUtilBundle\Services\Asset\AssetSanitizer
+        arguments:
+            - "@keylight_util_asset_repository"
+            - "@keylight_util_asset_provider"
+            - "@keylight_util_asset_manager"
+            - "@keylight_util_entity_manager"
+    keylight_util_asset_repository:
+        class: KeylightUtilBundle\Entity\Repository\AssetRepository
+        factory: doctrine.orm.entity_manager:getRepository
+        arguments:
+            - "KeylightUtilBundle:Asset"
+    keylight_util_asset_factory:
+        class: KeylightUtilBundle\Services\Asset\AssetFactory
+    # PROVIDERS
+    keylight_util_asset_provider:
+        class: KeylightUtilBundle\Services\Asset\Providers\AssetProvider
+        arguments:
+            - "@oneup_flysystem.default_filesystem"
+    keylight_util_cloudfront_asset_provider:
+        class: KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontAssetProvider
+        arguments:
+            - "%keylight_util_cloudfront_public_endpoint%"
+            - "%keylight_util_cloudfront_secure_endpoint%"
+            - "@keylight_util_cloudfront_client"
+            - "%keylight_util_cloudfront_private_key%"
+            - "%keylight_util_cloudfront_private_key_pair_id%"
+            - "%keylight_util_public_base_path%"
+            - "%keylight_util_secure_base_path%"
+        tags:
+            - { name: keylight.asset_provider }
+    keylight_util_local_asset_provider:
+        class: KeylightUtilBundle\Services\Asset\Providers\Local\LocalAssetProvider
+        arguments:
+            - "@oneup_flysystem.default_filesystem"
+        tags:
+            - { name: keylight.asset_provider }
+    keylight_util_asset_storage:
+        class: KeylightUtilBundle\Services\Asset\Storage\AssetStorage
+        arguments:
+            - "@oneup_flysystem.default_filesystem"
+            - "%keylight_util_asset_public_base_path%"
+            - "%keylight_util_asset_secure_base_path%"
+            - "%keylight_util_asset_folder%"
