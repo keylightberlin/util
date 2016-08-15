@@ -20,7 +20,7 @@ class CloudfrontAssetProvider implements AssetProviderInterface
     /**
      * @var string
      */
-    private $privateCloudfrontEndpoint;
+    private $secureCloudfrontEndpoint;
     /**
      * @var string
      */
@@ -29,6 +29,14 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      * @var string
      */
     private $privateCloudfrontKeyPairId;
+    /**
+     * @var string
+     */
+    private $publicBasePath;
+    /**
+     * @var string
+     */
+    private $secureBasePath;
 
     /**
      * @param string $publicCloudfrontEndpoint
@@ -36,19 +44,25 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      * @param CloudFrontClient $cloudFrontClient
      * @param string $privateCloudfrontKey
      * @param string $privateCloudfrontKeyPairId
+     * @param string $publicBasePath
+     * @param string $secureBasePath
      */
     public function __construct(
         $publicCloudfrontEndpoint,
         $privateCloudfrontEndpoint,
         CloudFrontClient $cloudFrontClient,
         $privateCloudfrontKey,
-        $privateCloudfrontKeyPairId
+        $privateCloudfrontKeyPairId,
+        $publicBasePath,
+        $secureBasePath
     ) {
         $this->publicCloudfrontEndpoint = $publicCloudfrontEndpoint;
         $this->cloudFrontClient = $cloudFrontClient;
-        $this->privateCloudfrontEndpoint = $privateCloudfrontEndpoint;
+        $this->secureCloudfrontEndpoint = $privateCloudfrontEndpoint;
         $this->privateCloudfrontKey = $privateCloudfrontKey;
         $this->privateCloudfrontKeyPairId = $privateCloudfrontKeyPairId;
+        $this->publicBasePath = $publicBasePath;
+        $this->secureBasePath = $secureBasePath;
     }
 
     /**
@@ -65,12 +79,14 @@ class CloudfrontAssetProvider implements AssetProviderInterface
     public function getUrlForAsset(Asset $asset)
     {
         if ($asset->isSecureStorage()) {
-            $baseUrl = $this->privateCloudfrontEndpoint;
+            $baseUrl = $this->secureCloudfrontEndpoint;
+            $prefixToRemove = $this->secureBasePath;
         } else {
             $baseUrl = $this->publicCloudfrontEndpoint;
+            $prefixToRemove = $this->publicBasePath;
         }
         
-        $url = $baseUrl . "/" . $asset->getRelativeUrl();
+        $url = $baseUrl . "/" . str_replace($prefixToRemove, "", $asset->getRelativeUrl());
 
         if ($asset->isSecureStorage()) {
             $url = $this->cloudFrontClient->getSignedUrl(
