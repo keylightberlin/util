@@ -38,17 +38,15 @@ class GenericAssetHandler implements AssetHandlerInterface
         }
         $this->entityManager->flush();
         /** If it's the same field, skip initializing and uploading it. */
-        if ($asset->getOriginalFileName() !== $asset->getUploadedFile()->getClientOriginalName()) {
-            $asset->setPath("");
-            $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());
-            $ext = $asset->getUploadedFile()->guessExtension();
-            $asset->setProcessedType("original");
-            $asset->setFileType($ext);
-            $key = substr(sha1(uniqid()), 0, 15);
-            $newFilename = $key . "." . $ext;
-            $asset->setFilename($newFilename);
-            $this->assetStorage->saveAsset($asset);
-        }
+        $asset->setPath("");
+        $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());
+        $ext = $asset->getUploadedFile()->guessExtension();
+        $asset->setProcessedType("original");
+        $asset->setFileType($ext);
+        $key = substr(sha1(uniqid()), 0, 15);
+        $newFilename = $key . "." . $ext;
+        $asset->setFilename($newFilename);
+        $this->assetStorage->saveAsset($asset);
     }
 
     /**
