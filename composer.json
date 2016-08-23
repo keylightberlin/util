@@ -11,7 +11,9 @@
     "php": ">=5.5",
     "aws/aws-sdk-php": "^3.13",
     "jms/serializer-bundle": "^1.1",
-    "stof/doctrine-extensions-bundle": "^1.2"
+    "stof/doctrine-extensions-bundle": "^1.2",
+    "oneup/flysystem-bundle": "^1.4",
+    "league/flysystem-aws-s3-v3": "^1.0"
   },
   "require-dev": {
   },
