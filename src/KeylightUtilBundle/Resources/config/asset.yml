@@ -45,8 +45,8 @@ services:
             - "@keylight_util_cloudfront_client"
             - "%keylight_util_cloudfront_private_key%"
             - "%keylight_util_cloudfront_private_key_pair_id%"
-            - "%keylight_util_public_base_path%"
-            - "%keylight_util_secure_base_path%"
+            - "%keylight_util_asset_public_base_path%"
+            - "%keylight_util_asset_secure_base_path%"
         tags:
             - { name: keylight.asset_provider }
     keylight_util_local_asset_provider:
