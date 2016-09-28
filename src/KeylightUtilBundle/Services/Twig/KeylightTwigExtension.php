@@ -53,6 +53,7 @@ class KeylightTwigExtension extends \Twig_Extension
             new \Twig_SimpleFilter('hyphenate', [$this, 'hyphenate']),
             new \Twig_SimpleFilter('arrayDump', [$this, 'arrayDump']),
             new \Twig_SimpleFilter('yesNo', [$this, 'yesNo']),
+            new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
             new \Twig_SimpleFilter('alertIfNotTranslated', [$this, 'alertIfNotTranslated'], array('is_safe' => array('html'))),
         ];
     }
@@ -146,6 +147,15 @@ class KeylightTwigExtension extends \Twig_Extension
     public function yesNo($string)
     {
         return $this->translator->trans($string ? 'label.yes' : 'label.no');
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function ucfirst($string)
+    {
+        return ucfirst($string);
     }
 
     /**
