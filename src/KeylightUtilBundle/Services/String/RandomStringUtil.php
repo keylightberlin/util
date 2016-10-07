@@ -134,7 +134,7 @@ final class RandomStringUtil
      */
     private function getRandomCharFromSet($set)
     {
-        return substr($set, mt_rand(0, strlen($set)), 1);
+        return substr($set, mt_rand(0, strlen($set) - 1), 1);
     }
 }
 
