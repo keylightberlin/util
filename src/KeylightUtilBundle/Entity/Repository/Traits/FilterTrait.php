@@ -16,17 +16,7 @@ trait FilterTrait
      */
     protected function addLikeFilter(QueryBuilder $queryBuilder, $name, $value)
     {
-        if ($value != null) {
-            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
-
-            $queryBuilder
-                ->andWhere(
-                    $name . " LIKE :" . $randomPlaceholder
-                )
-                ->setParameter($randomPlaceholder, "%" . $value . "%");
-        }
-
-        return $queryBuilder;
+        return $this->addComparisonFilter($queryBuilder, $name, "%" . $value . "%", "LIKE");
     }
 
     /**
@@ -38,17 +28,7 @@ trait FilterTrait
      */
     protected function addSuffixLikeFilter(QueryBuilder $queryBuilder, $name, $value)
     {
-        if ($value != null) {
-            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
-
-            $queryBuilder
-                ->andWhere(
-                    $name . " LIKE :" . $randomPlaceholder
-                )
-                ->setParameter($randomPlaceholder, "%" . $value);
-        }
-
-        return $queryBuilder;
+        return $this->addComparisonFilter($queryBuilder, $name, "%" . $value, "LIKE");
     }
 
     /**
@@ -60,17 +40,7 @@ trait FilterTrait
      */
     protected function addPrefixLikeFilter(QueryBuilder $queryBuilder, $name, $value)
     {
-        if ($value != null) {
-            $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
-
-            $queryBuilder
-                ->andWhere(
-                    $name . " LIKE :" . $randomPlaceholder
-                )
-                ->setParameter($randomPlaceholder, $value . "%");
-        }
-
-        return $queryBuilder;
+        return $this->addComparisonFilter($queryBuilder, $name, $value . "%", "LIKE");
     }
 
     /**
@@ -82,12 +52,74 @@ trait FilterTrait
      */
     protected function addIdentityFilter(QueryBuilder $queryBuilder, $name, $value)
     {
+        return $this->addComparisonFilter($queryBuilder, $name, $value, "=");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addLessFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        return $this->addComparisonFilter($queryBuilder, $name, $value, "<");
+    }
+
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addLessOrEqualFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        return $this->addComparisonFilter($queryBuilder, $name, $value, "<=");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addMoreFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        return $this->addComparisonFilter($queryBuilder, $name, $value, ">");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addMoreOrEqualFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        return $this->addComparisonFilter($queryBuilder, $name, $value, ">=");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     * @param string $comparison
+     *
+     * @return QueryBuilder
+     */
+    protected function addComparisonFilter(QueryBuilder $queryBuilder, $name, $value, $comparison)
+    {
         if ($value !== null) {
             $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
 
             $queryBuilder
                 ->andWhere(
-                    $name . " = :" . $randomPlaceholder
+                    $name . " " . $comparison . " :" . $randomPlaceholder
                 )
                 ->setParameter($randomPlaceholder, $value)
             ;
@@ -105,12 +137,37 @@ trait FilterTrait
      */
     protected function addContainmentFilter(QueryBuilder $queryBuilder, $name, $value)
     {
+        return $this->addCollectionFilter($queryBuilder, $name, $value, "IN");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return QueryBuilder
+     */
+    protected function addNotContainmentFilter(QueryBuilder $queryBuilder, $name, $value)
+    {
+        return $this->addCollectionFilter($queryBuilder, $name, $value, "NOT IN");
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $name
+     * @param mixed $value
+     * @param string $comparison
+     *
+     * @return QueryBuilder
+     */
+    protected function addCollectionFilter(QueryBuilder $queryBuilder, $name, $value, $comparison)
+    {
         if ($value != null) {
             $randomPlaceholder = static::$PLACEHOLDER_PREFIX . uniqid();
 
             $queryBuilder
                 ->andWhere(
-                    $name . " IN (:" . $randomPlaceholder . ")"
+                    $name . " " . $comparison . " (:" . $randomPlaceholder . ")"
                 )
                 ->setParameter($randomPlaceholder, $value )
             ;

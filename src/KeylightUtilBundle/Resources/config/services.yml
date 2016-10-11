@@ -28,3 +28,5 @@ services:
         arguments:
             - "@keylight_util_entity_manager"
             - "@keylight_util_random_string_util"
+    keylight_response_provider:
+        class: KeylightUtilBundle\Services\Response\ResponseProvider
