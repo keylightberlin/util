@@ -5,24 +5,24 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AssetProviderCompilerPass implements CompilerPassInterface
+class HealthCheckCompilerPass implements CompilerPassInterface
 {
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        $assetManager = $container->getDefinition(
-            'keylight_util_asset_provider'
+        $healthCheckProvider = $container->getDefinition(
+            'keylight_util_health_check_provider'
         );
 
-        $assetHandlers = $container->findTaggedServiceIds(
-            'keylight.asset_provider'
+        $healthCheckProviders = $container->findTaggedServiceIds(
+            'keylight_util.health_check'
         );
-        foreach ($assetHandlers as $id => $tags) {
+        foreach ($healthCheckProviders as $id => $tags) {
             foreach ($tags as $attributes) {
-                $assetManager->addMethodCall(
-                    'addAssetProvider',
+                $healthCheckProvider->addMethodCall(
+                    'registerHealthCheckProvider',
                     [new Reference($id)]
                 );
             }

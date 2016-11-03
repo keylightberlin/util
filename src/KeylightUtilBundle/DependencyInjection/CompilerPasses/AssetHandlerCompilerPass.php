@@ -23,7 +23,7 @@ class AssetHandlerCompilerPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $assetManager->addMethodCall(
                     'addAssetHandler',
-                    array(new Reference($id), $attributes['priority'])
+                    [new Reference($id), $attributes['priority']]
                 );
             }
         }

@@ -30,3 +30,10 @@ services:
             - "@keylight_util_random_string_util"
     keylight_response_provider:
         class: KeylightUtilBundle\Services\Response\ResponseProvider
+    keylight_util_health_check_provider:
+        class: KeylightUtilBundle\Services\Health\HealthCheckProvider
+    keylight_util_health_check_git:
+        class: KeylightUtilBundle\Services\Health\GitHealthCheckProvider
+        public: false
+        tags:
+            - { name: keylight_util.health_check }
