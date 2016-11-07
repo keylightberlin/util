@@ -6,6 +6,7 @@ use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 class CloudfrontAssetProvider implements AssetProviderInterface
 {
@@ -69,6 +70,14 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      * {@inheritdoc}
      */
     public function getFileForAsset(Asset $asset)
+    {
+        return new File($this->getUrlForAsset($asset));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFileContentsForAsset(Asset $asset)
     {
         return file_get_contents($this->getUrlForAsset($asset));
     }

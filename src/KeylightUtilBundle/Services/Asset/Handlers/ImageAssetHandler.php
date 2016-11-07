@@ -37,8 +37,7 @@ class ImageAssetHandler implements AssetHandlerInterface
     }
 
     /**
-     * @param Asset $asset
-     * @return string
+     * {@inheritdoc}
      */
     public function handleSave(Asset $asset)
     {

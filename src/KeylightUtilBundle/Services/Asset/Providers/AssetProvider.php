@@ -3,6 +3,7 @@ namespace KeylightUtilBundle\Services\Asset\Providers;
 
 use KeylightUtilBundle\Entity\Asset;
 use League\Flysystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 class AssetProvider implements AssetProviderInterface
 {
@@ -26,17 +27,35 @@ class AssetProvider implements AssetProviderInterface
     }
 
     /**
-     * @param Asset $asset
-     * @return string
+     * {@inheritdoc}
      */
     public function getFileForAsset(Asset $asset)
+    {
+        $file = null;
+
+        /** @var AssetProviderInterface $assetProvider */
+        foreach ($this->assetProviders as $assetProvider) {
+            if ($assetProvider->supportsFilesystem($this->filesystem)) {
+                $file = $assetProvider->getFileForAsset($asset);
+                break;
+            }
+        }
+
+        return $file;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFileContentsForAsset(Asset $asset)
     {
         $fileContents = null;
 
         /** @var AssetProviderInterface $assetProvider */
         foreach ($this->assetProviders as $assetProvider) {
             if ($assetProvider->supportsFilesystem($this->filesystem)) {
-                $assetProvider->getFileForAsset($asset);
+                $fileContents = $assetProvider->getFileContentsForAsset($asset);
+                break;
             }
         }
 
@@ -44,8 +63,7 @@ class AssetProvider implements AssetProviderInterface
     }
 
     /**
-     * @param Asset $asset
-     * @return string
+     * {@inheritdoc}
      */
     public function getUrlForAsset(Asset $asset)
     {
