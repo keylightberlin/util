@@ -7,7 +7,6 @@ interface AssetHandlerInterface
 {
     /**
      * @param Asset $asset
-     * @return string
      */
     public function handleSave(Asset $asset);
 

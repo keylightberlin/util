@@ -5,6 +5,7 @@ use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 class LocalAssetProvider implements AssetProviderInterface
 {
@@ -26,10 +27,15 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getFileForAsset(Asset $asset)
     {
-        /** @var Local $localAdapter */
-        $localAdapter = $this->filesystem->getAdapter();
+        return new File($this->getUrlForAsset($asset));
+    }
 
-        return file_get_contents($localAdapter->getPathPrefix() . $this->getUrlForAsset($asset));
+    /**
+     * {@inheritdoc}
+     */
+    public function getFileContentsForAsset(Asset $asset)
+    {
+        return file_get_contents($this->getUrlForAsset($asset));
     }
 
     /**
@@ -37,7 +43,10 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        return $asset->getRelativeUrl();
+        /** @var Local $localAdapter */
+        $localAdapter = $this->filesystem->getAdapter();
+
+        return $localAdapter->getPathPrefix() . $asset->getRelativeUrl();
     }
 
     /**
