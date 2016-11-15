@@ -430,6 +430,15 @@ class Asset implements Translatable, AssetInterface
     /**
      * @return bool
      */
+    public function isPdf()
+    {
+        return $this->type === AssetTypes::PDF
+            || in_array(strtolower(pathinfo($this->originalFileName, PATHINFO_EXTENSION)), ['pdf']);
+    }
+
+    /**
+     * @return bool
+     */
     public function isEmpty()
     {
         return empty($this->filename);
