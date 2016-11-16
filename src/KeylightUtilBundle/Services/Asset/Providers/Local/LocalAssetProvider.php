@@ -27,7 +27,10 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getFileForAsset(Asset $asset)
     {
-        return new File($this->getUrlForAsset($asset));
+        /** @var Local $localAdapter */
+        $localAdapter = $this->filesystem->getAdapter();
+
+        return new File($localAdapter->getPathPrefix() . $this->getUrlForAsset($asset));
     }
 
     /**
@@ -35,7 +38,10 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getFileContentsForAsset(Asset $asset)
     {
-        return file_get_contents($this->getUrlForAsset($asset));
+        /** @var Local $localAdapter */
+        $localAdapter = $this->filesystem->getAdapter();
+
+        return file_get_contents($localAdapter->getPathPrefix() . $this->getUrlForAsset($asset));
     }
 
     /**
@@ -43,10 +49,7 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function getUrlForAsset(Asset $asset)
     {
-        /** @var Local $localAdapter */
-        $localAdapter = $this->filesystem->getAdapter();
-
-        return $localAdapter->getPathPrefix() . $asset->getRelativeUrl();
+        return $asset->getRelativeUrl();
     }
 
     /**
