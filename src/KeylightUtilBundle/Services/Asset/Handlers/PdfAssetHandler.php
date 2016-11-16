@@ -33,11 +33,10 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
-        $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME)
-            . '.png';
+        $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.png';
 
         $documentImage = new \Imagick();
-        $documentImage->setResolution(150, 150);
+        $documentImage->setResolution(300, 300);
         $documentImage->readImage($asset->getUploadedFile()->getRealPath());
         $documentImage->resetIterator();
 
