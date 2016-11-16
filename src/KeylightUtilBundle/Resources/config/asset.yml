@@ -18,6 +18,14 @@ services:
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 50 }
+    keylight_util_pdf_asset_handler:
+        class: KeylightUtilBundle\Services\Asset\Handlers\PdfAssetHandler
+        arguments:
+            - "@keylight_util_asset_storage"
+            - "@keylight_util_asset_factory"
+        public: false
+        tags:
+            - { name: keylight.asset_handler, priority: 50 }
     keylight_util_asset_sanitizer:
         class: KeylightUtilBundle\Services\Asset\AssetSanitizer
         arguments:
