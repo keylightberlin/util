@@ -8,6 +8,9 @@ use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 
 class PdfAssetHandler implements AssetHandlerInterface
 {
+    const PNG = 'png';
+    const HTML = 'html';
+
     /**
      * @var AssetStorageInterface
      */
@@ -18,12 +21,19 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     private $assetFactory;
 
+    /**
+     * @var array
+     */
+    private $requiredFormats;
+
     public function __construct(
         AssetStorageInterface $assetStorage,
-        AssetFactoryInterface $assetFactory
+        AssetFactoryInterface $assetFactory,
+        array $requiredFormats
     ) {
         $this->assetStorage = $assetStorage;
         $this->assetFactory = $assetFactory;
+        $this->requiredFormats = $requiredFormats;
     }
 
     /**
@@ -31,8 +41,18 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
-        $this->generatePngForPdf($asset, 300);
-        $this->generateHtmlForPdf($asset);
+
+        /** @var array $requiredFormats */
+        foreach ($this->requiredFormats as $requiredFormat) {
+            switch ($requiredFormat['type']){
+                case self::PNG :
+                    $this->generatePng($asset, $requiredFormat['resolution']);
+                    break;
+                case self::HTML :
+                    $this->generateHtml($asset);
+                    break;
+            }
+        }
     }
 
     /**
@@ -56,7 +76,7 @@ class PdfAssetHandler implements AssetHandlerInterface
      * @param Asset $asset
      * @param int $resolution
      */
-    private function generatePngForPdf(Asset $asset, $resolution = 300)
+    private function generatePng(Asset $asset, $resolution = 300)
     {
         $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.png';
 
@@ -84,7 +104,7 @@ class PdfAssetHandler implements AssetHandlerInterface
      * @param Asset $asset
      * @throws \Exception
      */
-    private function generateHtmlForPdf(Asset $asset)
+    private function generateHtml(Asset $asset)
     {
         if (`which pdf2htmlEX`) {
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.html';

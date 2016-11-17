@@ -23,6 +23,7 @@ services:
         arguments:
             - "@keylight_util_asset_storage"
             - "@keylight_util_asset_factory"
+            - "%keylight_util_asset_pdf%"
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 50 }
