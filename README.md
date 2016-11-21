@@ -1,3 +1,5 @@
+[ ![Codeship Status for keylightberlin/util](https://app.codeship.com/projects/9d2f1350-9239-0134-cc17-1ed83dfd2c37/status?branch=master)](https://app.codeship.com/projects/186038)
+
 # Installation
 
 Add the following part to you `composer.json`:
