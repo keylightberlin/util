@@ -28,11 +28,11 @@ class EntityManager
     }
 
     /**
-     * @param object $entity
+     *
      */
-    public function flush($entity = null)
+    public function flush()
     {
-        $this->entityManager->flush($entity);
+        $this->entityManager->flush();
     }
 
     /**

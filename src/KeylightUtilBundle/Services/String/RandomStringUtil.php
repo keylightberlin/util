@@ -16,7 +16,7 @@ final class RandomStringUtil
     const SYMBOLS = "#+&%$*";
 
     /**
-     * Returns a random string of charcters and numbers.
+     * Returns a random string of characters and numbers.
      *
      * @param int $length
      * @return string
