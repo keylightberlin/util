@@ -39,3 +39,5 @@ services:
             - { name: keylight_util.health_check }
     keylight_util_response_creator:
         class: KeylightUtilBundle\Services\Api\ApiResponseCreator
+        arguments:
+            - "@jms_serializer.serializer"
