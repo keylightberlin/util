@@ -56,3 +56,7 @@ keylight_util:
 ## EntityManager
 
 ## Twig extensions
+
+# Dependencies
+
+Asset handler use awesome tool pdf2htmlEX (https://github.com/coolwanglu/pdf2htmlEX) to render an html file out of pdf. 

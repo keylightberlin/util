@@ -30,6 +30,7 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_cloudfront_private_key_pair_id', $config['aws']['cloudfront_private_key_pair_id']);
 
         $container->setParameter('keylight_util_asset_images', $config['asset']['images']);
+        $container->setParameter('keylight_util_asset_pdf', $config['asset']['pdf']);
         $container->setParameter('keylight_util_asset_public_base_path', $config['asset']['public_base_path']);
         $container->setParameter('keylight_util_asset_secure_base_path', $config['asset']['secure_base_path']);
         $container->setParameter('keylight_util_asset_folder', $config['asset']['folder']);
