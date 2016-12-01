@@ -1,6 +1,8 @@
 {
   "name": "keylightberlin/util",
   "description": "keylight Util Bundle",
+  "type": "symfyon-bundle",
+  "license": "MIT",
   "authors": [
     {
       "name": "keylight GmbH",
