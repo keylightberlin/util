@@ -108,7 +108,7 @@ final class DateTimeUtil
      * @param \DateTime $secondDay
      * @return bool
      */
-    public function isTimeEqual(\DateTime $firstDay, \DateTime $secondDay)
+    public static function isTimeEqual(\DateTime $firstDay, \DateTime $secondDay)
     {
         return $firstDay->format(static::DEFAULT_TIME_FORMAT) === $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
@@ -118,7 +118,7 @@ final class DateTimeUtil
      * @param \DateTime $secondDay
      * @return bool
      */
-    public function isLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    public static function isLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
     {
         return $firstDay->format(static::DEFAULT_TIME_FORMAT) > $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
@@ -128,7 +128,7 @@ final class DateTimeUtil
      * @param \DateTime $secondDay
      * @return bool
      */
-    public function isEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    public static function isEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
     {
         return $firstDay->format(static::DEFAULT_TIME_FORMAT) < $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
@@ -138,7 +138,7 @@ final class DateTimeUtil
      * @param \DateTime $secondDay
      * @return bool
      */
-    public function isNotEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    public static function isNotEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
     {
         return $firstDay->format(static::DEFAULT_TIME_FORMAT) >= $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
@@ -148,7 +148,7 @@ final class DateTimeUtil
      * @param \DateTime $secondDay
      * @return bool
      */
-    public function isNotLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    public static function isNotLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
     {
         return $firstDay->format(static::DEFAULT_TIME_FORMAT) <= $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
@@ -176,7 +176,7 @@ final class DateTimeUtil
      * @param \DateTime $endDate
      * @return int
      */
-    public function getDifferenceInSeconds(\DateTime $startDate, \DateTime $endDate)
+    public static function getDifferenceInSeconds(\DateTime $startDate, \DateTime $endDate)
     {
         return $endDate->getTimestamp() - $startDate->getTimestamp();
     }
@@ -186,9 +186,9 @@ final class DateTimeUtil
      * @param \DateTime $endDate
      * @return int
      */
-    public function getDifferenceInHours(\DateTime $startDate, \DateTime $endDate)
+    public static function getDifferenceInHours(\DateTime $startDate, \DateTime $endDate)
     {
-        return $this->getDifferenceInSeconds($startDate, $endDate) / 60;
+        return static::getDifferenceInSeconds($startDate, $endDate) / 60;
     }
 
     /**
@@ -196,8 +196,8 @@ final class DateTimeUtil
      * @param \DateTime $endDate
      * @return int
      */
-    public function getDifferenceInDays(\DateTime $startDate, \DateTime $endDate)
+    public static function getDifferenceInDays(\DateTime $startDate, \DateTime $endDate)
     {
-        return $this->getDifferenceInHours($startDate, $endDate) / 24;
+        return static::getDifferenceInHours($startDate, $endDate) / 24;
     }
 }
