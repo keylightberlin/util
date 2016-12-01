@@ -7,6 +7,7 @@ namespace KeylightUtilBundle\Util;
 final class DateTimeUtil
 {
     const DEFAULT_DATE_FORMAT = "Y-m-d";
+    const DEFAULT_TIME_FORMAT = "H:i";
 
     /**
      * @param \DateTime $dateTime
@@ -89,12 +90,67 @@ final class DateTimeUtil
      * Not very elegant.
      *
      * @param \DateTime $day
-     * @param $time
+     * @param string $time
      * @return \DateTime
      */
     public static function getDateTimeForDayAndTime(\DateTime $day, $time)
     {
-        return \DateTime::createFromFormat(static::DEFAULT_DATE_FORMAT . " H:i", $day->format(static::DEFAULT_DATE_FORMAT) . " " . $time);
+        return \DateTime::createFromFormat(
+            static::DEFAULT_DATE_FORMAT . " " . static::DEFAULT_TIME_FORMAT,
+            $day->format(static::DEFAULT_DATE_FORMAT) . " " . $time
+        );
+    }
+
+    /**
+     * Checks that the time is equal, regardless of the day. Only considers time up to minutes.
+     *
+     * @param \DateTime $firstDay
+     * @param \DateTime $secondDay
+     * @return bool
+     */
+    public function isTimeEqual(\DateTime $firstDay, \DateTime $secondDay)
+    {
+        return $firstDay->format(static::DEFAULT_TIME_FORMAT) === $secondDay->format(static::DEFAULT_TIME_FORMAT);
+    }
+
+    /**
+     * @param \DateTime $firstDay
+     * @param \DateTime $secondDay
+     * @return bool
+     */
+    public function isLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    {
+        return $firstDay->format(static::DEFAULT_TIME_FORMAT) > $secondDay->format(static::DEFAULT_TIME_FORMAT);
+    }
+
+    /**
+     * @param \DateTime $firstDay
+     * @param \DateTime $secondDay
+     * @return bool
+     */
+    public function isEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    {
+        return $firstDay->format(static::DEFAULT_TIME_FORMAT) < $secondDay->format(static::DEFAULT_TIME_FORMAT);
+    }
+
+    /**
+     * @param \DateTime $firstDay
+     * @param \DateTime $secondDay
+     * @return bool
+     */
+    public function isNotEarlierOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    {
+        return $firstDay->format(static::DEFAULT_TIME_FORMAT) >= $secondDay->format(static::DEFAULT_TIME_FORMAT);
+    }
+
+    /**
+     * @param \DateTime $firstDay
+     * @param \DateTime $secondDay
+     * @return bool
+     */
+    public function isNotLaterOnDay(\DateTime $firstDay, \DateTime $secondDay)
+    {
+        return $firstDay->format(static::DEFAULT_TIME_FORMAT) <= $secondDay->format(static::DEFAULT_TIME_FORMAT);
     }
 
     /**
@@ -113,5 +169,35 @@ final class DateTimeUtil
         $secondDateAtMidnight = static::getDateAtMidnight($secondDate);
 
         return $firstDateAtMidnight->diff($secondDateAtMidnight)->d;
+    }
+
+    /**
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return int
+     */
+    public function getDifferenceInSeconds(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $endDate->getTimestamp() - $startDate->getTimestamp();
+    }
+
+    /**
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return int
+     */
+    public function getDifferenceInHours(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->getDifferenceInSeconds($startDate, $endDate) / 60;
+    }
+
+    /**
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return int
+     */
+    public function getDifferenceInDays(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->getDifferenceInHours($startDate, $endDate) / 24;
     }
 }
