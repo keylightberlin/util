@@ -71,7 +71,14 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      */
     public function getFileForAsset(Asset $asset)
     {
-        return new File($this->getUrlForAsset($asset));
+        /**
+         * @todo This is very very very very stupid. Does anyone know how to use stream wrappers?
+         */
+        $fileContents = $this->getFileContentsForAsset($asset);
+        $randomName = "/tmp/" . uniqid() . "-" . $asset->getFilename();
+        file_put_contents($randomName, $fileContents);
+        
+        return new File($randomName);
     }
 
     /**
