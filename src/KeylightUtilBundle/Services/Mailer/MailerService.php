@@ -13,15 +13,21 @@ class MailerService
      * @var string
      */
     private $senderAddress;
+    /**
+     * @var string
+     */
+    private $senderName;
 
     /**
      * @param \Swift_Mailer $mailer
-     * @param $senderAddress
+     * @param string $senderAddress
+     * @param string $senderName
      */
-    public function __construct(\Swift_Mailer $mailer, $senderAddress)
+    public function __construct(\Swift_Mailer $mailer, $senderAddress, $senderName = '')
     {
         $this->mailer = $mailer;
         $this->senderAddress = $senderAddress;
+        $this->senderName = $senderName;
     }
 
     /**
@@ -30,7 +36,12 @@ class MailerService
      */
     public function sendMail(Email $email)
     {
-        $email->setFrom($this->senderAddress);
+        if (false === empty($this->senderName)) {
+            $email->setFrom($this->senderAddress, $this->senderName);
+        } else {
+            $email->setFrom($this->senderAddress);
+        }
+
         $this->mailer->send($email);
 
         return true;

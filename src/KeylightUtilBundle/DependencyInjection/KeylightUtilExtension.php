@@ -17,6 +17,7 @@ class KeylightUtilExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('keylight_util_sender_address', $config['email']['sender_address']);
+        $container->setParameter('keylight_util_sender_name', $config['email']['sender_name']);
 
         $container->setParameter('keylight_util_s3_access_key_id', $config['aws']['s3_access_key_id']);
         $container->setParameter('keylight_util_s3_secret_access_key', $config['aws']['s3_secret_access_key']);
