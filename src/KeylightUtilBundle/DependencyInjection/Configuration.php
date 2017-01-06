@@ -18,6 +18,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('email')
                         ->children()
                             ->scalarNode('sender_address')->defaultValue("mail@keylight.de")->end()
+                            ->scalarNode('sender_name')->defaultValue("keylight")->end()
                         ->end()
                     ->end()
                     ->arrayNode('aws')

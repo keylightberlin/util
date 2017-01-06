@@ -21,6 +21,7 @@ services:
         arguments:
             - "@mailer"
             - "%keylight_util_sender_address%"
+            - "%keylight_util_sender_name%"
     keylight_util_random_string_util:
         class: KeylightUtilBundle\Services\String\RandomStringUtil
     keylight_util_uuid_provider:
