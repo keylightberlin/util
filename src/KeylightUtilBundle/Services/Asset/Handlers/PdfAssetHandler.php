@@ -117,14 +117,16 @@ class PdfAssetHandler implements AssetHandlerInterface
             fclose($handle);
             unlink($tempHtmlFile);
 
-            $childAsset = $this->assetFactory->getInstance();
-            $childAsset->setStorageType($asset->getStorageType());
-            $childAsset->setType($asset->getType());
-            $childAsset->setFilename($newFilename);
-            $childAsset->setFileContents($htmlFileContent);
+            if (false === empty($htmlFileContent)) {
+                $childAsset = $this->assetFactory->getInstance();
+                $childAsset->setStorageType($asset->getStorageType());
+                $childAsset->setType($asset->getType());
+                $childAsset->setFilename($newFilename);
+                $childAsset->setFileContents($htmlFileContent);
 
-            $asset->addChildAsset($childAsset);
-            $this->assetStorage->saveAsset($childAsset);
+                $asset->addChildAsset($childAsset);
+                $this->assetStorage->saveAsset($childAsset);
+            }
         } else {
             throw new \Exception('pdf2htmlEX is not install');
         }
