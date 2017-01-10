@@ -41,7 +41,6 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
-
         /** @var array $requiredFormats */
         foreach ($this->requiredFormats as $requiredFormat) {
             switch ($requiredFormat['type']){
@@ -69,7 +68,7 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     public function supportsAsset(Asset $asset)
     {
-        return $asset->isPdf();
+        return $asset->isPdf() && false === boolval($asset->isSkipProcessing());
     }
 
     /**
