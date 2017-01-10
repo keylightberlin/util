@@ -173,6 +173,11 @@ class Asset implements Translatable, AssetInterface
      */
     private $fileContents;
 
+    /**
+     * @var bool
+     */
+    private $skipProcessing;
+
     public function __construct()
     {
         $this->childAssets = new ArrayCollection();
@@ -538,5 +543,21 @@ class Asset implements Translatable, AssetInterface
     public function setFileContents($fileContents)
     {
         $this->fileContents = $fileContents;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipProcessing()
+    {
+        return $this->skipProcessing;
+    }
+
+    /**
+     * @param bool $skipProcessing
+     */
+    public function setSkipProcessing($skipProcessing)
+    {
+        $this->skipProcessing = $skipProcessing;
     }
 }

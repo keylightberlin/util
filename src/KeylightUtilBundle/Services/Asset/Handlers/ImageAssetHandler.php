@@ -112,6 +112,6 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function supportsAsset(Asset $asset)
     {
-        return $asset->isImage();
+        return $asset->isImage() && false === boolval($asset->isSkipProcessing());
     }
 }
