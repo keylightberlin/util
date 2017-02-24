@@ -24,4 +24,48 @@ class DateTimeUtilTest extends TestCase
         $this->assertEquals($startDate->format('d.m.y'), $copiedDate->format('d.m.y'));
         $this->assertNotEquals(spl_object_hash($startDate), spl_object_hash($copiedDate));
     }
+
+    public function testTimeDifferenceInSeconds()
+    {
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+20seconds");
+
+        $this->assertEquals(20, $this->dateTimeUtil->getDifferenceInSeconds($firstDate, $secondDate));
+    }
+
+    public function testTimeDifferenceInMinutes()
+    {
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+4hours");
+
+        $this->assertEquals(240, $this->dateTimeUtil->getDifferenceInMinutes($firstDate, $secondDate));
+    }
+
+    public function testTimeDifferenceInHours()
+    {
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+5days");
+
+        $this->assertEquals(120, $this->dateTimeUtil->getDifferenceInHours($firstDate, $secondDate));
+
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+12minutes");
+
+        $this->assertEquals(0, $this->dateTimeUtil->getDifferenceInHours($firstDate, $secondDate));
+    }
+
+    public function testTimeDifferenceInDays()
+    {
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+35days");
+
+        $this->assertEquals(35, $this->dateTimeUtil->getDifferenceInDays($firstDate, $secondDate));
+
+
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+35days");
+        $secondDate->modify("+14hours");
+
+        $this->assertEquals(35, $this->dateTimeUtil->getDifferenceInDays($firstDate, $secondDate));
+    }
 }
