@@ -61,10 +61,9 @@ class DateTimeUtilTest extends TestCase
 
         $this->assertEquals(35, $this->dateTimeUtil->getDifferenceInDays($firstDate, $secondDate));
 
-
-        $firstDate = new \DateTime();
-        $secondDate = new \DateTime("+35days");
-        $secondDate->modify("+14hours");
+        $firstDate = new \DateTime("midnight");
+        $secondDate = new \DateTime("midnight");
+        $secondDate->modify("+14hours")->modify("+35Days");
 
         $this->assertEquals(35, $this->dateTimeUtil->getDifferenceInDays($firstDate, $secondDate));
     }
