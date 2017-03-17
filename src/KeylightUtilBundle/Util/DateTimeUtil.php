@@ -167,7 +167,6 @@ final class DateTimeUtil
     {
         $firstDateAtMidnight = static::getDateAtMidnight($firstDate);
         $secondDateAtMidnight = static::getDateAtMidnight($secondDate);
-
         return $firstDateAtMidnight->diff($secondDateAtMidnight)->d;
     }
 
@@ -178,7 +177,7 @@ final class DateTimeUtil
      */
     public static function getDifferenceInSeconds(\DateTime $startDate, \DateTime $endDate)
     {
-        return $endDate->getTimestamp() - $startDate->getTimestamp();
+        return ($endDate->getTimestamp() - $startDate->getTimestamp());
     }
 
     /**
@@ -208,6 +207,8 @@ final class DateTimeUtil
      */
     public static function getDifferenceInDays(\DateTime $startDate, \DateTime $endDate)
     {
-        return floor(static::getDifferenceInSeconds($startDate, $endDate) / (60 * 60 * 24));
+        $interval = $endDate->diff($startDate);
+        return intval($interval->format('%a'));
     }
+
 }
