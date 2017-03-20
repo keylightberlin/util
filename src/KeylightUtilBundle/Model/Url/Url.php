@@ -4,24 +4,49 @@ namespace KeylightUtilBundle\Model\Url;
 
 class Url
 {
+    const BROKEN_URL = "The URL is too broken to be used";
     const NO_PROTOCOL = "There is no protocol in the given URL";
-    const NO_SUBDOMAIN = "There is no subdomain at the index in the given URL";
     const NO_DOMAIN = "There is no domain in the given URL";
-    const NO_TLD = "There is no Top Level Domain in the given URL";
     const NO_HOST = "There is no Host in the given URL";
 
+    /**
+     * @var string
+     */
     private $url;
+
+    /**
+     * @var array
+     */
     private $urlParsed;
 
     /**
-     * Url constructor.
      * @param string $url
      */
     function __construct($url)
     {
         $this->url = $url;
         $this->urlParsed = parse_url($url);
+        $this->checkUrlIsValid();
     }
+
+    /**
+     * @return array
+     */
+    private function getAllDomainParts()
+    {
+        return explode(".", $this->urlParsed["host"]);
+    }
+
+    /**
+     * Calculate Number of Subdomains.
+     * @return int
+     */
+    public function getNumberOfSubDomains()
+    {
+        $allDomainParts = $this->getAllDomainParts();
+        return max(0, count($allDomainParts) - 2);
+    }
+
     /**
      * Returns the original url
      * @return string
@@ -32,23 +57,41 @@ class Url
     }
 
     /**
+     * Returns the Domain combined with the Top Level Domain as string.
+     * @return string
+     */
+    public function  getDomainWithTopLevelDomain()
+    {
+        return $this->getDomain() . "." . $this->getTopLevelDomain();
+    }
+
+    /**
+     * Returns a string with all Subdomains or empty string if there are none.
+     * @return string
+     */
+    public function getAllSubDomainsAsString()
+    {
+        return implode(".", $this->getAllSubDomainsAsArray());
+    }
+
+    /**
+     * Returns all Subdomains as array.
+     * @return array
+     */
+    public function getAllSubDomainsAsArray()
+    {
+        $allDomainParts = $this->getAllDomainParts();
+        return array_slice($allDomainParts, 0, -2);
+    }
+
+    /**
      * Returns the Subdomain at the given index starting at 0, if no index is given it returns the highest subdomain.
      * @param int $index
      * @return string
      */
-    public function getSubDomain($index=0)
+    public function getSubDomain($index = 0)
     {
-        if (false == array_key_exists ( "host" , $this->urlParsed)) {
-            throw new \Exception(static::NO_HOST);
-        }
-        $host = $this->urlParsed["host"];
-        $subDomainAndDomain = explode(".",$host);
-        if (count($subDomainAndDomain) <= $index + 1) {
-            throw new \Exception(static::NO_SUBDOMAIN);
-        } else {
-            $subdomain = $subDomainAndDomain[count($subDomainAndDomain)-3-$index];
-        }
-        return $subdomain;
+        return array_reverse($this->getAllSubDomainsAsArray())[$index] ?? "";
     }
 
     /**
@@ -57,17 +100,8 @@ class Url
      */
     public function getDomain()
     {
-        if (false == array_key_exists ( "host" , $this->urlParsed)) {
-            throw new \Exception(static::NO_HOST);
-        }
-        $host = $this->urlParsed["host"];
-        $subDomainAndDomain = explode(".",$host);
-        if ($subDomainAndDomain[count($subDomainAndDomain)-2] == "") {
-            throw new \Exception(static::NO_DOMAIN);
-        } else {
-            $domain = $subDomainAndDomain[count($subDomainAndDomain)-2];
-        }
-        return $domain;
+        $allDomainParts = $this->getAllDomainParts();
+        return $allDomainParts[count($allDomainParts)-2];
     }
 
     /**
@@ -76,17 +110,8 @@ class Url
      */
     public function getTopLevelDomain()
     {
-        if (false == array_key_exists ( "host" , $this->urlParsed)) {
-            throw new \Exception(static::NO_HOST);
-        }
-        $host = $this->urlParsed["host"];
-        $domainAndTopLevelDomain = explode(".",$host);
-        if ($domainAndTopLevelDomain[count($domainAndTopLevelDomain)-1] == "") {
-            throw new \Exception(static::NO_TLD);
-        } else {
-            $tld = $domainAndTopLevelDomain[count($domainAndTopLevelDomain)-1];
-        }
-        return $tld;
+        $allDomainParts = $this->getAllDomainParts();
+        return $allDomainParts[count($allDomainParts)-1];
     }
 
     /**
@@ -95,15 +120,7 @@ class Url
      */
     public function getProtocol()
     {
-        if (false == array_key_exists ( "scheme" , $this->urlParsed)) {
-            throw new \Exception(static::NO_PROTOCOL);
-        }
-        else if ($this->urlParsed["scheme"] != "") {
-            $protocol = $this->urlParsed["scheme"];
-        } else {
-            throw new \Exception(static::NO_PROTOCOL);
-        }
-        return $protocol;
+        return $this->urlParsed["scheme"];
     }
 
     /**
@@ -131,5 +148,26 @@ class Url
     public function getFragment()
     {
         return $this->urlParsed["fragment"] ?? "";
+    }
+
+    private function checkUrlIsValid()
+    {
+        if (false === $this->urlParsed) {
+            throw new \Exception(static::BROKEN_URL);
+        }
+        if (false === array_key_exists("host", $this->urlParsed)) {
+            throw new \Exception(static::NO_HOST);
+        }
+        if (
+            false === array_key_exists("scheme" , $this->urlParsed)
+            || $this->urlParsed["scheme"] === ""
+        ) {
+            throw new \Exception(static::NO_PROTOCOL);
+        }
+        $allDomainParts = $this->getAllDomainParts();
+        if ($allDomainParts[count($allDomainParts) - 2] === "") {
+            throw new \Exception(static::NO_DOMAIN);
+        }
+
     }
 }
