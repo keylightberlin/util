@@ -124,6 +124,33 @@ class Url
     }
 
     /**
+     * Returns the Port or empty string if not existent.
+     * @return string
+     */
+    public function getPort()
+    {
+        return $this->urlParsed["port"] ?? "";
+    }
+
+    /**
+     * Returns the User or empty string if not existent.
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->urlParsed["user"] ?? "";
+    }
+
+    /**
+     * Returns the Pass or empty string if not existent.
+     * @return string
+     */
+    public function getPass()
+    {
+        return $this->urlParsed["pass"] ?? "";
+    }
+
+    /**
      * Returns the Path or empty string if not existent.
      * @return string
      */
@@ -150,6 +177,9 @@ class Url
         return $this->urlParsed["fragment"] ?? "";
     }
 
+    /**
+     * @throws \Exception
+     */
     private function checkUrlIsValid()
     {
         if (false === $this->urlParsed) {
