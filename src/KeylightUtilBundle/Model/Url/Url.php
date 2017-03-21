@@ -66,6 +66,14 @@ class Url
     }
 
     /**
+     * Returns the complete host.
+     * @return string
+     */
+    public function getHost()
+    {
+        return  $this->getAllSubDomainsAsString() . "." . $this->getDomainWithTopLevelDomain();
+    }
+    /**
      * Returns a string with all Subdomains or empty string if there are none.
      * @return string
      */
