@@ -39,6 +39,11 @@ class DateTimeUtilTest extends TestCase
         $secondDate = new \DateTime("+4hours");
 
         $this->assertEquals(240, $this->dateTimeUtil->getDifferenceInMinutes($firstDate, $secondDate));
+
+        $firstDate = new \DateTime();
+        $secondDate = new \DateTime("+12seconds");
+
+        $this->assertEquals(0, $this->dateTimeUtil->getDifferenceInMinutes($firstDate, $secondDate));
     }
 
     public function testTimeDifferenceInHours()
@@ -49,7 +54,7 @@ class DateTimeUtilTest extends TestCase
         $this->assertEquals(120, $this->dateTimeUtil->getDifferenceInHours($firstDate, $secondDate));
 
         $firstDate = new \DateTime();
-        $secondDate = new \DateTime("+12minutes");
+        $secondDate = new \DateTime("+2minutes");
 
         $this->assertEquals(0, $this->dateTimeUtil->getDifferenceInHours($firstDate, $secondDate));
     }
