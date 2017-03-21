@@ -71,7 +71,7 @@ class Url
      */
     public function getHost()
     {
-        return  $this->getAllSubDomainsAsString() . "." . $this->getDomainWithTopLevelDomain();
+        return  $this->urlParsed["host"];
     }
     /**
      * Returns a string with all Subdomains or empty string if there are none.
