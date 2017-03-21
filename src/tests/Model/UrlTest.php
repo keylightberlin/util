@@ -148,4 +148,13 @@ class UrlTest extends TestCase
         $this->expectException(\Exception::class);
         new Url("http://de");
     }
+
+    public function testGetHost()
+    {
+        $host = "sdTwo.sdOne.sdZero.domain.tld";
+
+        $result = $this->url->getHost();
+
+        $this->assertEquals($host,$result);
+    }
 }
