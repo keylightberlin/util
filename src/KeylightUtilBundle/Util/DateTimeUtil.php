@@ -187,7 +187,11 @@ final class DateTimeUtil
      */
     public static function getDifferenceInMinutes(\DateTime $startDate, \DateTime $endDate)
     {
-        return floor(static::getDifferenceInSeconds($startDate, $endDate) / 60);
+        $interval = $endDate->diff($startDate);
+        $minutes = $interval->days * 24 * 60;
+        $minutes += $interval->h * 60;
+        $minutes += $interval->i;
+        return $minutes;
     }
 
     /**
@@ -197,7 +201,10 @@ final class DateTimeUtil
      */
     public static function getDifferenceInHours(\DateTime $startDate, \DateTime $endDate)
     {
-        return floor(static::getDifferenceInSeconds($startDate, $endDate) / (60 * 60));
+        $interval = $endDate->diff($startDate);
+        $hours = $interval->days * 24;
+        $hours += $interval->h;
+        return $hours;
     }
 
     /**
