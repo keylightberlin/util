@@ -38,7 +38,7 @@ class Url
     }
 
     /**
-     * Calculate Number of Subdomains.
+     * Calculate Number of SubDomains.
      * @return int
      */
     public function getNumberOfSubDomains()
@@ -74,7 +74,7 @@ class Url
         return  $this->urlParsed["host"];
     }
     /**
-     * Returns a string with all Subdomains or empty string if there are none.
+     * Returns a string with all SubDomains or empty string if there are none.
      * @return string
      */
     public function getAllSubDomainsAsString()
@@ -83,7 +83,7 @@ class Url
     }
 
     /**
-     * Returns all Subdomains as array.
+     * Returns all SubDomains as array.
      * @return array
      */
     public function getAllSubDomainsAsArray()
@@ -93,7 +93,7 @@ class Url
     }
 
     /**
-     * Returns the Subdomain at the given index starting at 0, if no index is given it returns the highest subdomain.
+     * Returns the SubDomain at the given index starting at 0, if no index is given it returns the highest SubDomain.
      * @param int $index
      * @return string
      */
