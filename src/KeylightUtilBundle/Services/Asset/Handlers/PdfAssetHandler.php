@@ -9,6 +9,7 @@ use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 class PdfAssetHandler implements AssetHandlerInterface
 {
     const PNG = 'png';
+    const JPEG = 'jpeg';
     const HTML = 'html';
 
     /**
@@ -44,10 +45,13 @@ class PdfAssetHandler implements AssetHandlerInterface
         /** @var array $requiredFormats */
         foreach ($this->requiredFormats as $requiredFormat) {
             switch ($requiredFormat['type']){
-                case self::PNG :
-                    $this->generatePng($asset, $requiredFormat['resolution']);
+                case self::PNG:
+                    $this->generateForFormat($asset, $requiredFormat['resolution'], 'png');
                     break;
-                case self::HTML :
+                case self::JPEG:
+                    $this->generateForFormat($asset, $requiredFormat['resolution'], 'jpg');
+                    break;
+                case self::HTML:
                     $this->generateHtml($asset);
                     break;
             }
@@ -75,9 +79,9 @@ class PdfAssetHandler implements AssetHandlerInterface
      * @param Asset $asset
      * @param int $resolution
      */
-    private function generatePng(Asset $asset, $resolution = 300)
+    private function generateForFormat(Asset $asset, $resolution = 300, $format = 'png')
     {
-        $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.png';
+        $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.' . $format;
 
         $documentImage = new \Imagick();
         $documentImage->setResolution($resolution, $resolution);
@@ -85,7 +89,8 @@ class PdfAssetHandler implements AssetHandlerInterface
         $documentImage->resetIterator();
         $documentImage = $documentImage->appendImages(true);
         $documentImage = $documentImage->flattenImages();
-        $documentImage->setImageFormat('png');
+        $documentImage->setImageFormat($format);
+        $documentImage->setColorspace(\Imagick::COLORSPACE_RGB);
 
         $childAsset = $this->assetFactory->getInstance();
         $childAsset->setStorageType($asset->getStorageType());
