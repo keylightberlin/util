@@ -84,6 +84,7 @@ class PdfAssetHandler implements AssetHandlerInterface
         $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.' . $format;
 
         $documentImage = new \Imagick();
+        $documentImage->setColorspace(\Imagick::COLORSPACE_RGB);
         $documentImage->setResolution($resolution, $resolution);
         $documentImage->readImage($asset->getUploadedFile()->getRealPath());
         $documentImage->resetIterator();
