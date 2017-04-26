@@ -58,6 +58,6 @@ class LocalAssetProvider implements AssetProviderInterface
      */
     public function supportsFilesystem(Filesystem $filesystem)
     {
-        return get_class($filesystem->getAdapter()) === Local::class;
+        return $filesystem->getAdapter() instanceof Local;
     }
 }

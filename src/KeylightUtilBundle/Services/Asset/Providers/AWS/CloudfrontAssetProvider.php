@@ -124,6 +124,6 @@ class CloudfrontAssetProvider implements AssetProviderInterface
      */
     public function supportsFilesystem(Filesystem $filesystem)
     {
-        return get_class($filesystem->getAdapter()) === AwsS3Adapter::class;
+        return $filesystem->getAdapter() instanceof AwsS3Adapter;
     }
 }
