@@ -7,7 +7,6 @@ jobs:
         steps:
             - run: apt-get update && apt-get -y install git unzip
             - checkout
-            - run: docker-php-ext-install pdo pdo_mysql zip
             - run:
                 name: Install Composer
                 command: |
