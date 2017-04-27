@@ -2,11 +2,12 @@ version: 2
 jobs:
     build:
         docker:
-            - image: php:7.0
+            - image: php:7.0-cli
         working_directory: /var/www/html
         steps:
             - run: apt-get update && apt-get -y install git unzip
             - checkout
+            - run: docker-php-ext-install pdo pdo_mysql zip
             - run:
                 name: Install Composer
                 command: |
