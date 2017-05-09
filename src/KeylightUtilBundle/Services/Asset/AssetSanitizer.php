@@ -67,10 +67,17 @@ class AssetSanitizer
      */
     public function regenerateAsset(Asset $asset)
     {
+        $arrContextOptions=array(
+            "ssl"=>array(
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            ),
+        );
+
         $this->clearSubAssets($asset);
         $assetOriginalFilename =  $this->assetProviderInterface->getUrlForAsset($asset);
         try {
-            $file = file_get_contents($assetOriginalFilename);
+            $file = file_get_contents($assetOriginalFilename, false, stream_context_create($arrContextOptions));
             $localName = "/tmp/" . uniqid();
             file_put_contents($localName, $file);
             $asset->setUploadedFile(new UploadedFile($localName, $asset->getOriginalFileName()));
