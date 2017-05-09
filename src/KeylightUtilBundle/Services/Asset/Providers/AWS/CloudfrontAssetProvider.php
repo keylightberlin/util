@@ -101,8 +101,8 @@ class CloudfrontAssetProvider implements AssetProviderInterface
             $baseUrl = $this->publicCloudfrontEndpoint;
             $prefixToRemove = $this->publicBasePath;
         }
-        
-        $url = $baseUrl . "/" . substr( $asset->getRelativeUrl(), 0, strlen($prefixToRemove));
+
+        $url = $baseUrl . "/" . substr( $asset->getRelativeUrl(), strlen($prefixToRemove) - 1);
 
         if ($asset->isSecureStorage()) {
             $url = $this->cloudFrontClient->getSignedUrl(
