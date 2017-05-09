@@ -48,7 +48,7 @@ class AssetSanitizer
     /**
      * Regenerates images for the specific sizes determined by the config.
      */
-    public function regerateAllAssets()
+    public function regenerateAllAssets()
     {
         $assets = $this->assetRepository->findAll();
 
@@ -86,7 +86,7 @@ class AssetSanitizer
      */
     private function clearSubAssets(Asset $asset)
     {
-        /** @var SubAsset $subAsset */
+        /** @var Asset $subAsset */
         foreach ($asset->getChildAssets() as $subAsset) {
             $this->entityManager->remove($subAsset, false);
         }
