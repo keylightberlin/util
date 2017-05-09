@@ -65,7 +65,7 @@ class AssetSanitizer
     /**
      * @param Asset $asset
      */
-    public function regenerateAsset(Asset $asset)
+    public function regenerateAssets(Asset $asset)
     {
         $this->clearSubAssets($asset);
         $assetOriginalFilename =  $this->assetProviderInterface->getUrlForAsset($asset);

@@ -25,6 +25,6 @@ class RecreateAssetsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('keylight_util_asset_sanitizer')->regerateAllAssets();
+        $this->getContainer()->get('keylight_util_asset_sanitizer')->regenerateAssets();
     }
 }
