@@ -82,9 +82,11 @@ class AssetSanitizer
             file_put_contents($localName, $file);
             $asset->setUploadedFile(new UploadedFile($localName, $asset->getOriginalFileName()));
             $this->assetManager->saveAsset($asset);
-            exec("rm " . $localName);
+            // exec("rm " . $localName); somehow does not work
+            echo "Finished " . $asset->getId() ."\n";
         } catch (\Exception $e) {
-            echo "Skipping";
+            echo "Skipping " . $asset->getId() ." because:\n";
+            echo $e->getMessage() . "\n";
         }
     }
 
