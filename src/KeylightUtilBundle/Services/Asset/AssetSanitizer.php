@@ -60,9 +60,14 @@ class AssetSanitizer
                 || $asset->getType() === AssetTypes::PDF
             ) {
                 try {
+                    $this->entityManager->persist($asset);
                     $this->regenerateAsset($asset);
                 } catch (\Exception $e) {
                     echo $e;
+                }
+
+                if (rand(1, 100) < 3) {
+                    $this->entityManager->clear();
                 }
             }
         }
@@ -88,6 +93,7 @@ class AssetSanitizer
             file_put_contents($localName, $file);
             $asset->setUploadedFile(new UploadedFile($localName, $asset->getOriginalFileName()));
             $this->assetManager->saveAsset($asset);
+            unset($file);
             // exec("rm " . $localName); somehow does not work
             echo "Finished " . $asset->getId() ."\n";
         } catch (\Exception $e) {
