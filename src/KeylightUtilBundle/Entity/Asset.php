@@ -530,6 +530,25 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
+     * @param $processedType
+     * @return Asset
+     */
+    public function getChildByProcessedType($processedType)
+    {
+        $processedImage = $this;
+
+        /** @var Asset $childAsset */
+        foreach ($this->childAssets as $childAsset) {
+            if ($childAsset->getProcessedType() === $processedType) {
+                $processedImage = $childAsset;
+                break;
+            }
+        }
+
+        return $processedImage;
+    }
+
+    /**
      * @return string
      */
     public function getFileContents()
