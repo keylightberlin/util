@@ -3,6 +3,7 @@ namespace KeylightUtilBundle\Services\Asset;
 
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Entity\Repository\AssetRepository;
+use KeylightUtilBundle\Model\Asset\AssetTypes;
 use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 use KeylightUtilBundle\Services\EntityManager\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -54,10 +55,15 @@ class AssetSanitizer
 
         /** @var Asset $asset */
         foreach ($assets as $asset) {
-            try {
-                $this->regenerateAsset($asset);
-            } catch (\Exception $e) {
-                echo $e;
+            if (
+                $asset->getType() === AssetTypes::IMAGE
+                || $asset->getType() === AssetTypes::PDF
+            ) {
+                try {
+                    $this->regenerateAsset($asset);
+                } catch (\Exception $e) {
+                    echo $e;
+                }
             }
         }
     }
