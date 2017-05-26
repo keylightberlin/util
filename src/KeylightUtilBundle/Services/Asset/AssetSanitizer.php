@@ -60,7 +60,7 @@ class AssetSanitizer
      */
     public function regenerateAllAssets($onlyBroken = false)
     {
-        $assets = $this->assetRepository->findAll();
+        $assets = $this->assetRepository->findBy(['parentAsset' => null]);
 
         /** @var Asset $asset */
         foreach ($assets as $asset) {
