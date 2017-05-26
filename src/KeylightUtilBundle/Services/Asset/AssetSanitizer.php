@@ -89,12 +89,10 @@ class AssetSanitizer
                 } catch (\Exception $e) {
                     echo $e;
                 }
-
-                if (rand(1, 100) < 3) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear();
-                }
             }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 
