@@ -62,6 +62,10 @@ class AssetSanitizer
     {
         $assets = $this->assetRepository->findBy(['parentAsset' => null]);
 
+        $totalAssetCount = count($assets);
+        $i = 0;
+        echo "Found " . $totalAssetCount . "\n";
+
         /** @var Asset $asset */
         foreach ($assets as $asset) {
 
@@ -88,6 +92,8 @@ class AssetSanitizer
                     $this->entityManager->clear();
                 }
             }
+
+            echo "Processed " . ++$i . " of " . $totalAssetCount . " assets.\n";
         }
     }
 
