@@ -34,6 +34,7 @@ services:
             - "@keylight_util_asset_provider"
             - "@keylight_util_asset_manager"
             - "@keylight_util_entity_manager"
+            - "%keylight_util_asset_images%"
     keylight_util_asset_repository:
         class: KeylightUtilBundle\Entity\Repository\AssetRepository
         factory: doctrine.orm.entity_manager:getRepository

@@ -26,6 +26,10 @@ class AssetSanitizer
      * @var EntityManager
      */
     private $entityManager;
+    /**
+     * @var array
+     */
+    private $requiredImages;
 
     /**
      * AssetSanitizer constructor.
@@ -33,28 +37,42 @@ class AssetSanitizer
      * @param AssetProviderInterface $assetProviderInterface
      * @param AssetManagerInterface $assetManager
      * @param EntityManager $entityManager
+     * @param array $requiredImages
      */
     public function __construct(
         AssetRepository $assetRepository,
         AssetProviderInterface $assetProviderInterface,
         AssetManagerInterface $assetManager,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        array $requiredImages
     ) {
         $this->assetRepository = $assetRepository;
         $this->assetProviderInterface = $assetProviderInterface;
         $this->assetManager = $assetManager;
         $this->entityManager = $entityManager;
+        $this->requiredImages = $requiredImages;
     }
 
     /**
      * Regenerates images for the specific sizes determined by the config.
+     *
+     * @param bool $onlyBroken
      */
-    public function regenerateAllAssets()
+    public function regenerateAllAssets($onlyBroken = false)
     {
         $assets = $this->assetRepository->findAll();
 
         /** @var Asset $asset */
         foreach ($assets as $asset) {
+
+            if (
+                $onlyBroken
+                && $asset->getChildAssets()->count() === count($this->requiredImages)
+            ) {
+                echo "Skipping " . $asset->getId() ." because it is completely fine!\n";
+                continue;
+            }
+
             if (
                 $asset->getType() === AssetTypes::IMAGE
                 || $asset->getType() === AssetTypes::PDF
