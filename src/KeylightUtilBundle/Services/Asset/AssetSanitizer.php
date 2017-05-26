@@ -69,6 +69,8 @@ class AssetSanitizer
         /** @var Asset $asset */
         foreach ($assets as $asset) {
 
+            echo "Processing asset " . ++$i . " of " . $totalAssetCount . "\n";
+
             if (
                 $onlyBroken
                 && $asset->getChildAssets()->count() === count($this->requiredImages)
@@ -92,8 +94,6 @@ class AssetSanitizer
                     $this->entityManager->clear();
                 }
             }
-
-            echo "Processed " . ++$i . " of " . $totalAssetCount . " assets.\n";
         }
     }
 
