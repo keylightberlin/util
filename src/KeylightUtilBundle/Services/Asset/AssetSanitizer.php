@@ -92,7 +92,6 @@ class AssetSanitizer
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
     }
 
