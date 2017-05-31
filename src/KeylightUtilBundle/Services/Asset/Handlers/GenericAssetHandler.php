@@ -49,10 +49,9 @@ class GenericAssetHandler implements AssetHandlerInterface
         }
         $asset->setProcessedType("original");
         $key = substr(sha1(uniqid()), 0, 15);
-        if (empty($asset->getFilename())) {
-            $newFilename = $key . "." . $ext;
-            $asset->setFilename($newFilename);
-        }
+        $newFilename = $key . "." . $ext;
+        $asset->setFilename($newFilename);
+        
         $this->assetStorage->saveAsset($asset);
     }
 
