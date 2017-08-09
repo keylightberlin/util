@@ -57,8 +57,9 @@ class AssetSanitizer
      * Regenerates images for the specific sizes determined by the config.
      *
      * @param bool $onlyBroken
+     * @param bool $alsoSecure
      */
-    public function regenerateAllAssets($onlyBroken = false)
+    public function regenerateAllAssets($onlyBroken = false, $alsoSecure = false)
     {
         $assets = $this->assetRepository->findBy(['parentAsset' => null]);
 
@@ -69,11 +70,17 @@ class AssetSanitizer
         /** @var Asset $asset */
         foreach ($assets as $asset) {
 
-            echo "Processing asset " . ++$i . " of " . $totalAssetCount . "\n";
+            echo "Processing asset " . ++$i . " of " . $totalAssetCount . " (id: " . $asset->getId() . ")\n";
 
             if (
-                $onlyBroken
-                && $asset->getChildAssets()->count() === count($this->requiredImages)
+                (
+                    $onlyBroken
+                    && $asset->getChildAssets()->count() === count($this->requiredImages)
+                )
+                ||
+                (
+                    $asset->isSecureStorage() && false === $alsoSecure
+                )
             ) {
                 echo "Skipping " . $asset->getId() ." because it is completely fine!\n";
                 continue;
