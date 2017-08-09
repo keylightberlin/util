@@ -58,10 +58,12 @@ class AssetSanitizer
      *
      * @param bool $onlyBroken
      * @param bool $alsoSecure
+     * @param int $fromId
+     * @param int $toId
      */
-    public function regenerateAllAssets($onlyBroken = false, $alsoSecure = false)
+    public function regenerateAllAssets($onlyBroken = false, $alsoSecure = false, $fromId = 0, $toId = 100000000)
     {
-        $assets = $this->assetRepository->findBy(['parentAsset' => null]);
+        $assets = $this->assetRepository->findBaseAssetsForIdsFromTo($fromId, $toId);
 
         $totalAssetCount = count($assets);
         $i = 0;

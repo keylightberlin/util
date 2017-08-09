@@ -87,6 +87,7 @@ class ImageAssetHandler implements AssetHandlerInterface
             $childAsset = $this->assetFactory->getInstance();
             $childAsset->setStorageType($asset->getStorageType());
             $childAsset->setType($asset->getType());
+            $childAsset->setFileType('jpeg');
             $childAsset->setFilename($newFilename);
             $childAsset->setProcessedType($requiredImage['name']);
             $childAsset->setHeight($newImage->getImageHeight());
