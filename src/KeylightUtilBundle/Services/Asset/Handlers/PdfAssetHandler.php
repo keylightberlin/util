@@ -128,7 +128,7 @@ class PdfAssetHandler implements AssetHandlerInterface
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.html';
 
             $tempHtmlFile = tempnam(sys_get_temp_dir(), 'pdf2html');
-            exec("pdf2htmlEX --zoom 1.3 --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
+            exec("pdf2htmlEX --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
 
             $htmlFileContent = file_get_contents($tempHtmlFile);
             $htmlFileContent = str_replace("</body>\n</html>", $this->appendStyling(), $htmlFileContent);
