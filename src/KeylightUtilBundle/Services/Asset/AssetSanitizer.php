@@ -82,6 +82,7 @@ class AssetSanitizer
             if (
                 $asset->getType() === AssetTypes::IMAGE
                 || $asset->getType() === AssetTypes::PDF
+                || in_array($asset->getFileType(), ['png', 'jpg', 'jpeg', 'pdf'])
             ) {
                 try {
                     $this->entityManager->persist($asset);

@@ -101,6 +101,7 @@ class PdfAssetHandler implements AssetHandlerInterface
         $childAsset = $this->assetFactory->getInstance();
         $childAsset->setStorageType($asset->getStorageType());
         $childAsset->setType($asset->getType());
+        $childAsset->setFileType($format);
         $childAsset->setFilename($newFilename);
         $childAsset->setHeight($documentImage->getImageHeight());
         $childAsset->setWidth($documentImage->getImageWidth());
@@ -129,6 +130,7 @@ class PdfAssetHandler implements AssetHandlerInterface
                 $childAsset = $this->assetFactory->getInstance();
                 $childAsset->setStorageType($asset->getStorageType());
                 $childAsset->setType($asset->getType());
+                $childAsset->setFileType("html");
                 $childAsset->setFilename($newFilename);
                 $childAsset->setFileContents($htmlFileContent);
 

@@ -321,6 +321,8 @@ class Asset implements Translatable, AssetInterface
     }
 
     /**
+     * @TODO What is this?
+     *
      * @param string $type
      * @return Asset
      */
