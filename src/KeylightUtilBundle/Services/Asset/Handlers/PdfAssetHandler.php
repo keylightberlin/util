@@ -120,15 +120,21 @@ class PdfAssetHandler implements AssetHandlerInterface
 
     /**
      * @param Asset $asset
+     * @param int|null $width
      * @throws \Exception
      */
-    private function generateHtml(Asset $asset)
+    private function generateHtml(Asset $asset, $width = null)
     {
         if (`which pdf2htmlEX`) {
+            $widthParam = '';
+            if (false === empty($width)) {
+                $widthParam = " --fit-width " . $width . " ";
+            }
+
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.html';
 
             $tempHtmlFile = tempnam(sys_get_temp_dir(), 'pdf2html');
-            exec("pdf2htmlEX --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
+            exec("pdf2htmlEX " . $widthParam . " --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
 
             $htmlFileContent = file_get_contents($tempHtmlFile);
             $htmlFileContent = str_replace("</body>\n</html>", $this->appendStyling(), $htmlFileContent);

@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                                     ->children()
                                         ->scalarNode('type')->isRequired()->end()
                                         ->scalarNode('resolution')->defaultValue(300)->end()
+                                        ->scalarNode('width')->defaultNull()->end()
                                     ->end()
                                 ->end()
                             ->end()
