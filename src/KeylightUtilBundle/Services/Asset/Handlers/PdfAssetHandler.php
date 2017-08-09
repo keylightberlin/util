@@ -27,6 +27,11 @@ class PdfAssetHandler implements AssetHandlerInterface
      */
     private $requiredFormats;
 
+    /**
+     * @param AssetStorageInterface $assetStorage
+     * @param AssetFactoryInterface $assetFactory
+     * @param array $requiredFormats
+     */
     public function __construct(
         AssetStorageInterface $assetStorage,
         AssetFactoryInterface $assetFactory,
@@ -78,6 +83,7 @@ class PdfAssetHandler implements AssetHandlerInterface
     /**
      * @param Asset $asset
      * @param int $resolution
+     * @param string $format
      */
     private function generateForFormat(Asset $asset, $resolution = 300, $format = 'png')
     {
@@ -89,7 +95,6 @@ class PdfAssetHandler implements AssetHandlerInterface
         $documentImage->readImage($asset->getUploadedFile()->getRealPath());
         $documentImage->resetIterator();
         $documentImage = $documentImage->appendImages(true);
-        $documentImage = $documentImage->flattenImages();
         $documentImage->setImageFormat($format);
         $documentImage->setColorspace(\Imagick::COLORSPACE_RGB);
 
@@ -115,12 +120,10 @@ class PdfAssetHandler implements AssetHandlerInterface
             $newFilename = pathinfo($asset->getFilename(), PATHINFO_FILENAME) . '.html';
 
             $tempHtmlFile = tempnam(sys_get_temp_dir(), 'pdf2html');
-            exec("pdf2htmlEX --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
+            exec("pdf2htmlEX --zoom 1.3 --dest-dir " . dirname($tempHtmlFile) . ' ' . $asset->getUploadedFile()->getRealPath() . ' ' . basename($tempHtmlFile));
 
-            $handle = fopen($tempHtmlFile, "r");
-            $htmlFileContent = fread($handle, filesize($tempHtmlFile));
-            fclose($handle);
-            unlink($tempHtmlFile);
+            $htmlFileContent = file_get_contents($tempHtmlFile);
+            $htmlFileContent = str_replace("</body>\n</html>", $this->appendStyling(), $htmlFileContent);
 
             if (false === empty($htmlFileContent)) {
                 $childAsset = $this->assetFactory->getInstance();
@@ -133,7 +136,26 @@ class PdfAssetHandler implements AssetHandlerInterface
                 $this->assetStorage->saveAsset($childAsset);
             }
         } else {
-            throw new \Exception('pdf2htmlEX is not install');
+            throw new \Exception('pdf2htmlEX is not installed');
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function appendStyling()
+    {
+        return "
+        <style type='text/css'>
+    #pf1, #page-container {
+        background: white !important;
+        -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;;
+        box-shadow: none!important;;
+    }
+</style>
+</body>
+</html>
+        ";
     }
 }
