@@ -60,7 +60,7 @@ class PdfAssetHandler implements AssetHandlerInterface
                         $this->generateForFormat($asset, $requiredFormat['resolution'], 'jpg');
                         break;
                     case self::HTML:
-                        $this->generateHtml($asset);
+                        $this->generateHtml($asset, $requiredFormat['width'] ?? null);
                         break;
                 }
             } catch (\Exception $exception) {
