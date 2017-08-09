@@ -5,6 +5,7 @@ namespace KeylightUtilBundle\Services\Asset\Handlers;
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Services\Asset\AssetFactoryInterface;
 use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
+use function PHPSTORM_META\type;
 
 class PdfAssetHandler implements AssetHandlerInterface
 {
@@ -49,16 +50,22 @@ class PdfAssetHandler implements AssetHandlerInterface
     {
         /** @var array $requiredFormats */
         foreach ($this->requiredFormats as $requiredFormat) {
-            switch ($requiredFormat['type']){
-                case self::PNG:
-                    $this->generateForFormat($asset, $requiredFormat['resolution'], 'png');
-                    break;
-                case self::JPEG:
-                    $this->generateForFormat($asset, $requiredFormat['resolution'], 'jpg');
-                    break;
-                case self::HTML:
-                    $this->generateHtml($asset);
-                    break;
+            try {
+
+                switch ($requiredFormat['type']){
+                    case self::PNG:
+                        $this->generateForFormat($asset, $requiredFormat['resolution'], 'png');
+                        break;
+                    case self::JPEG:
+                        $this->generateForFormat($asset, $requiredFormat['resolution'], 'jpg');
+                        break;
+                    case self::HTML:
+                        $this->generateHtml($asset);
+                        break;
+                }
+            } catch (\Exception $exception) {
+                echo "Error generating " . $requiredFormat['type'];
+                echo "\n" . $exception->getMessage() . "\n";
             }
         }
     }
