@@ -77,7 +77,7 @@ class AssetSanitizer
             if (
                 (
                     $onlyBroken
-                    && $asset->getChildAssets()->count() === count($this->requiredImages)
+                    && false === boolval($asset->isProcessingFailed())
                 )
                 ||
                 (
@@ -96,8 +96,10 @@ class AssetSanitizer
                 try {
                     $this->entityManager->persist($asset);
                     $this->regenerateAsset($asset);
+                    $asset->setProcessingFailed(false);
                 } catch (\Exception $e) {
-                    echo $e;
+                    $asset->setProcessingFailed(true);
+                    $asset->addProcessingFailedFormats($e->getMessage());
                 }
             }
 
@@ -131,6 +133,8 @@ class AssetSanitizer
         } catch (\Exception $e) {
             echo "Skipping " . $asset->getId() ." because:\n";
             echo $e->getMessage() . "\n";
+            $asset->setProcessingFailed(true);
+            $asset->addProcessingFailedFormats($e->getMessage());
         }
     }
 

@@ -66,6 +66,8 @@ class PdfAssetHandler implements AssetHandlerInterface
             } catch (\Exception $exception) {
                 echo "Error generating " . $requiredFormat['type'];
                 echo "\n" . $exception->getMessage() . "\n";
+                $asset->setProcessingFailed(true);
+                $asset->addProcessingFailedFormats($requiredFormat['type'] . " : " . $exception->getMessage());
             }
         }
     }

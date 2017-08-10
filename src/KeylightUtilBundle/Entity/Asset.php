@@ -146,6 +146,24 @@ class Asset implements Translatable, AssetInterface
     private $storageType;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="processing_failed", type="boolean", nullable=true)
+     *
+     * @Exclude()
+     */
+    private $processingFailed;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="processing_failed_formats", type="string", length=500, nullable=true)
+     *
+     * @Exclude()
+     */
+    private $processingFailedFormats;
+
+    /**
      * @var Asset
      *
      * @ORM\ManyToOne(targetEntity="KeylightUtilBundle\Entity\Asset", inversedBy="childAssets")
@@ -580,5 +598,45 @@ class Asset implements Translatable, AssetInterface
     public function setSkipProcessing($skipProcessing)
     {
         $this->skipProcessing = $skipProcessing;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessingFailedFormats(): ?string
+    {
+        return $this->processingFailedFormats;
+    }
+
+    /**
+     * @param string $processingFailedFormats
+     */
+    public function setProcessingFailedFormats(string $processingFailedFormats)
+    {
+        $this->processingFailedFormats = $processingFailedFormats;
+    }
+
+    /**
+     * @param string $processingFailedFormats
+     */
+    public function addProcessingFailedFormats(string $processingFailedFormats)
+    {
+        $this->processingFailedFormats .= " --- " . $processingFailedFormats;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProcessingFailed(): ?bool
+    {
+        return $this->processingFailed;
+    }
+
+    /**
+     * @param bool $processingFailed
+     */
+    public function setProcessingFailed(bool $processingFailed)
+    {
+        $this->processingFailed = $processingFailed;
     }
 }
