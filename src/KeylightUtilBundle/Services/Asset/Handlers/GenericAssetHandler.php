@@ -31,6 +31,9 @@ class GenericAssetHandler implements AssetHandlerInterface
      */
     public function handleSave(Asset $asset)
     {
+        $asset->setProcessingFailed(false);
+        $asset->setProcessingFailedFormats('');
+
         /** @var Asset $asset */
         foreach ($asset->getChildAssets() as $subAsset) {
             $this->entityManager->remove($subAsset, false);

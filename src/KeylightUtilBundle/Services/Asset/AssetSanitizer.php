@@ -95,7 +95,6 @@ class AssetSanitizer
             ) {
                 try {
                     $this->entityManager->persist($asset);
-                    $asset->setProcessingFailed(false);
                     $this->regenerateAsset($asset);
                 } catch (\Exception $e) {
                     $asset->setProcessingFailed(true);

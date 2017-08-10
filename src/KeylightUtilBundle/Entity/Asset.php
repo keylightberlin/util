@@ -200,6 +200,7 @@ class Asset implements Translatable, AssetInterface
     {
         $this->childAssets = new ArrayCollection();
         $this->storageType = AssetStorageTypes::PUBLIC_STORAGE;
+        $this->processingFailedFormats = '';
     }
 
     /**
