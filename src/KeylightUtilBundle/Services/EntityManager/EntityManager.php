@@ -72,4 +72,12 @@ class EntityManager
     {
         return $this->entityManager->getRepository($className);
     }
+
+    /**
+     * @param object $entity
+     */
+    public function refresh($entity)
+    {
+        $this->entityManager->refresh($entity);
+    }
 }
