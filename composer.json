@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=5.5",
+    "php": ">=7.1",
     "aws/aws-sdk-php": "^3.13",
     "jms/serializer-bundle": "^1.1",
     "stof/doctrine-extensions-bundle": "^1.2",

@@ -3,6 +3,9 @@ namespace KeylightUtilBundle\Model\Health;
 
 class HealthCheck
 {
+    const STATUS_KEY = "status";
+    const CHECKS_KEY = "checks";
+
     /**
      * @var string
      */
@@ -73,5 +76,21 @@ class HealthCheck
     public function addValue($key, $value)
     {
         $this->values[$key] = $value;
+    }
+
+    public function hasFailed(): bool
+    {
+        return HealthCheckStatusTypes::ERROR === $this->getStatus();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            $this->getKey(),
+            [
+                static::STATUS_KEY => $this->getStatus(),
+                static::CHECKS_KEY => $this->getValues(),
+            ]
+        ];
     }
 }
