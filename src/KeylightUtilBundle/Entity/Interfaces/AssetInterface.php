@@ -27,4 +27,19 @@ interface AssetInterface
      * @return string
      */
     public function getType();
+
+    /**
+     * @return string
+     */
+    public function getFileType();
+
+    /**
+     * @return string
+     */
+    public function getOriginalFilename();
+
+    /**
+     * @return string
+     */
+    public function getStorageType();
 }

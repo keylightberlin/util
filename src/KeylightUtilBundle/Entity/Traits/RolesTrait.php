@@ -26,6 +26,7 @@ trait RolesTrait
 
     /**
      * @param string $role
+     * @return bool
      */
     public function hasRole($role)
     {
@@ -38,7 +39,7 @@ trait RolesTrait
     public function removeRole($role)
     {
         $this->roles = array_filter($this->roles, function ($existingRole) use ($role) {
-            return $role === $existingRole;
+            return $role !== $existingRole;
         });
     }
 

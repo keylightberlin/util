@@ -1,11 +1,10 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
+namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Entity\SubAsset;
-use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
-use KeylightUtilBundle\Services\Asset\AWS\S3Uploader;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
 use KeylightUtilBundle\Services\EntityManager\EntityManager;
+use League\Flysystem\Filesystem;
 
 class GenericAssetHandler implements AssetHandlerInterface
 {
@@ -17,7 +16,6 @@ class GenericAssetHandler implements AssetHandlerInterface
      * @var EntityManager
      */
     private $entityManager;
-
     /**
      * @param AssetStorageInterface $assetStorage
      * @param EntityManager $entityManager
@@ -30,34 +28,42 @@ class GenericAssetHandler implements AssetHandlerInterface
 
     /**
      * @param Asset $asset
-     * @return string
      */
     public function handleSave(Asset $asset)
     {
-        /** @var SubAsset $subAsset */
-        foreach ($asset->getSubAssets() as $subAsset) {
+        $asset->setProcessingFailed(false);
+        $asset->setProcessingFailedFormats('');
+
+        /** @var Asset $asset */
+        foreach ($asset->getChildAssets() as $subAsset) {
             $this->entityManager->remove($subAsset, false);
+            $this->assetStorage->removeAsset($subAsset);
         }
         $this->entityManager->flush();
 
-        /** If it's the same field, skip initializing and uploading it. */
-        if ($asset->getOriginalFileName() !== $asset->getUploadedFile()->getClientOriginalName()) {
+        $asset->setPath("");
+        if ($asset->getUploadedFile() !== null) {
             $asset->setOriginalFileName($asset->getUploadedFile()->getClientOriginalName());
             $ext = $asset->getUploadedFile()->guessExtension();
             $asset->setFileType($ext);
-            $key = substr(sha1(uniqid()), 0, 15);
-            $newFilename = $key . "." . $ext;
-            $asset->setFilename($newFilename);
-
-            $this->assetStorage->uploadAsset($asset);
+        } else {
+            $asset->setOriginalFileName("unknown");
+            $ext = $asset->getFileType();
         }
+        $asset->setProcessedType("original");
+        $key = substr(sha1(uniqid()), 0, 15);
+        $newFilename = $key . "." . $ext;
+        $asset->setFilename($newFilename);
+
+        $this->assetStorage->saveAsset($asset);
     }
 
     /**
-     * @param $asset
+     * @param Asset $asset
      */
-    public function handleRemove($asset)
+    public function handleRemove(Asset $asset)
     {
+        $this->entityManager->remove($asset);
         $this->assetStorage->removeAsset($asset);
     }
 

@@ -7,10 +7,13 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AssetHandlerCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         $assetManager = $container->getDefinition(
-            'keylight_asset_manager'
+            'keylight_util_asset_manager'
         );
 
         $assetHandlers = $container->findTaggedServiceIds(
@@ -20,7 +23,7 @@ class AssetHandlerCompilerPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $assetManager->addMethodCall(
                     'addAssetHandler',
-                    array(new Reference($id), $attributes['priority'])
+                    [new Reference($id), $attributes['priority']]
                 );
             }
         }

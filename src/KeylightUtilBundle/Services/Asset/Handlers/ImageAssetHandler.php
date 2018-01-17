@@ -1,10 +1,10 @@
 <?php
-namespace KeylightUtilBundle\Services\Asset\AssetHandlers;
+namespace KeylightUtilBundle\Services\Asset\Handlers;
 
 use KeylightUtilBundle\Entity\Asset;
-use KeylightUtilBundle\Entity\SubAsset;
-use KeylightUtilBundle\Model\Asset\AssetTypes;
-use KeylightUtilBundle\Services\Asset\AssetStorageInterface;
+use KeylightUtilBundle\Services\Asset\AssetFactoryInterface;
+use KeylightUtilBundle\Services\Asset\Storage\AssetStorageInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageAssetHandler implements AssetHandlerInterface
 {
@@ -16,26 +16,35 @@ class ImageAssetHandler implements AssetHandlerInterface
      * @var AssetStorageInterface
      */
     private $assetStorage;
+    /**
+     * @var AssetFactoryInterface
+     */
+    private $assetFactory;
 
     /**
      * @param AssetStorageInterface $assetStorage
+     * @param AssetFactoryInterface $assetFactory
      * @param array $requiredImages
      */
-    public function __construct(AssetStorageInterface $assetStorage, array $requiredImages)
-    {
+    public function __construct(
+        AssetStorageInterface $assetStorage,
+        AssetFactoryInterface $assetFactory,
+        array $requiredImages
+    ) {
         $this->requiredImages = $requiredImages;
         $this->assetStorage = $assetStorage;
+        $this->assetFactory = $assetFactory;
     }
 
     /**
-     * @param Asset $asset
-     * @return string
+     * {@inheritdoc}
      */
     public function handleSave(Asset $asset)
     {
         $newImage = new \Imagick($asset->getUploadedFile()->getRealPath());
         $asset->setHeight($newImage->getImageHeight());
         $asset->setWidth($newImage->getImageWidth());
+        $orientation = $newImage->getImageOrientation();
 
         /** @var array $requiredImage */
         foreach ($this->requiredImages as $requiredImage) {
@@ -49,10 +58,10 @@ class ImageAssetHandler implements AssetHandlerInterface
             $imageWidth = $newImage->getImageWidth();
             $imageHeight = $newImage->getImageHeight();
             $isLandscapeFormat = $imageWidth > $imageHeight;
-            $orientation = $newImage->getImageOrientation();
 
-            $newImage->setCompression(\Imagick::COMPRESSION_JPEG);
+            $newImage->setImageCompression(\Imagick::COMPRESSION_JPEG);
             $newImage->setImageCompressionQuality($requiredImage['quality']);
+            $newImage->setImageOrientation($orientation);
 
             if ($isLandscapeFormat) {
                 $desiredWidth = $requiredImage['long'];
@@ -74,30 +83,28 @@ class ImageAssetHandler implements AssetHandlerInterface
                 }
             }
 
-            /**
-             * This unfortunately kills the orientation. Leave EXIF-Info for now.
-             *
-             * $newImage->stripImage();
-             * $newImage->setImageOrientation($orientation);
-             */
+            $newImage->stripImage();
+            $childAsset = $this->assetFactory->getInstance();
+            $childAsset->setStorageType($asset->getStorageType());
+            $childAsset->setType($asset->getType());
+            $childAsset->setFileType('jpeg');
+            $childAsset->setFilename($newFilename);
+            $childAsset->setProcessedType($requiredImage['name']);
+            $childAsset->setHeight($newImage->getImageHeight());
+            $childAsset->setWidth($newImage->getImageWidth());
+            $childAsset->setFileContents($newImage);
 
-            $this->assetStorage->uploadFile($newFilename, $newImage);
-
-            $subAsset = new SubAsset();
-            $subAsset->setFilename($newFilename);
-            $subAsset->setType($requiredImage['name']);
-            $subAsset->setHeight($newImage->getImageHeight());
-            $subAsset->setWidth($newImage->getImageWidth());
-            $asset->addSubAsset($subAsset);
+            $asset->addChildAsset($childAsset);
+            $this->assetStorage->saveAsset($childAsset);
         }
     }
 
     /**
      * @param $asset
      */
-    public function handleRemove($asset)
+    public function handleRemove(Asset $asset)
     {
-        // TODO: Implement handleRemove() method.
+        // Get handled by generic handler already.
     }
 
     /**
@@ -106,6 +113,6 @@ class ImageAssetHandler implements AssetHandlerInterface
      */
     public function supportsAsset(Asset $asset)
     {
-        return $asset->isImage();
+        return $asset->isImage() && false === boolval($asset->isSkipProcessing());
     }
 }

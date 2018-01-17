@@ -3,8 +3,9 @@ namespace KeylightUtilBundle\Services\Twig;
 
 use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Entity\Interfaces\AssetInterface;
-use KeylightUtilBundle\Services\Asset\AssetProviderInterface;
+use KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface;
 use KeylightUtilBundle\Services\String\StringFormatter;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class KeylightTwigExtension extends \Twig_Extension
 {
@@ -16,15 +17,24 @@ class KeylightTwigExtension extends \Twig_Extension
      * @var AssetProviderInterface
      */
     private $assetProvider;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * @param StringFormatter $stringFormatter
      * @param AssetProviderInterface $assetProviderInterface
+     * @param TranslatorInterface $translator
      */
-    public function __construct(StringFormatter $stringFormatter, AssetProviderInterface $assetProviderInterface)
-    {
+    public function __construct(
+        StringFormatter $stringFormatter,
+        AssetProviderInterface $assetProviderInterface,
+        TranslatorInterface $translator
+    ) {
         $this->stringFormatter = $stringFormatter;
         $this->assetProvider = $assetProviderInterface;
+        $this->translator = $translator;
     }
 
     /**
@@ -41,6 +51,9 @@ class KeylightTwigExtension extends \Twig_Extension
             new \Twig_SimpleFilter('publicUrl', [$this, 'publicUrl']),
             new \Twig_SimpleFilter('dateWeekday', [$this, 'dateWeekday']),
             new \Twig_SimpleFilter('hyphenate', [$this, 'hyphenate']),
+            new \Twig_SimpleFilter('arrayDump', [$this, 'arrayDump']),
+            new \Twig_SimpleFilter('yesNo', [$this, 'yesNo']),
+            new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
             new \Twig_SimpleFilter('alertIfNotTranslated', [$this, 'alertIfNotTranslated'], array('is_safe' => array('html'))),
         ];
     }
@@ -83,21 +96,10 @@ class KeylightTwigExtension extends \Twig_Extension
     }
 
     /**
-     * @deprecated Use publicUrl instead.
-     *
-     * @param AssetInterface $asset
+     * @param Asset $asset
      * @return string
      */
-    public function cloudfrontUrl(AssetInterface $asset)
-    {
-        return $this->assetProvider->getUrlForAsset($asset);
-    }
-
-    /**
-     * @param AssetInterface $asset
-     * @return string
-     */
-    public function publicUrl(AssetInterface $asset)
+    public function publicUrl(Asset $asset)
     {
         return $this->assetProvider->getUrlForAsset($asset);
     }
@@ -127,6 +129,33 @@ class KeylightTwigExtension extends \Twig_Extension
     public function hyphenate($string)
     {
         return $this->stringFormatter->getHyphenation($string);
+    }
+
+    /**
+     * @param $array
+     * @return string
+     */
+    public function arrayDump(array $array)
+    {
+        return implode(", ", $array);
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function yesNo($string)
+    {
+        return $this->translator->trans($string ? 'label.yes' : 'label.no');
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function ucfirst($string)
+    {
+        return ucfirst($string);
     }
 
     /**
