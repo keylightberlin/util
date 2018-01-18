@@ -3,6 +3,7 @@ services:
         class: KeylightUtilBundle\Services\EntityManager\EntityManager
         arguments:
             - "@doctrine.orm.entity_manager"
+    KeylightUtilBundle\Services\EntityManager\EntityManager: '@keylight_util_entity_manager'
     keylight_util_twig_extension:
         class: KeylightUtilBundle\Services\Twig\KeylightTwigExtension
         arguments:
@@ -12,29 +13,37 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+    KeylightUtilBundle\Services\Twig\KeylightTwigExtension: '@keylight_util_twig_extension'
     keylight_util_string_formatter:
         class: KeylightUtilBundle\Services\String\StringFormatter
         arguments:
             - "%locale%"
+    KeylightUtilBundle\Services\String\StringFormatter: '@keylight_util_string_formatter'
     keylight_util_mailer:
         class: KeylightUtilBundle\Services\Mailer\MailerService
         arguments:
             - "@mailer"
             - "%keylight_util_sender_address%"
             - "%keylight_util_sender_name%"
+    KeylightUtilBundle\Services\Mailer\MailerService: '@keylight_util_mailer'
     keylight_util_random_string_util:
         class: KeylightUtilBundle\Services\String\RandomStringUtil
+    KeylightUtilBundle\Services\String\RandomStringUtil: '@keylight_util_random_string_util'
     keylight_util_uuid_provider:
         class: KeylightUtilBundle\Services\Uuid\UuidProvider
         arguments:
             - "@keylight_util_entity_manager"
             - "@keylight_util_random_string_util"
+    KeylightUtilBundle\Services\Uuid\UuidProvider: '@keylight_util_uuid_provider'
     keylight_response_provider:
         class: KeylightUtilBundle\Services\Response\ResponseProvider
+    KeylightUtilBundle\Services\Response\ResponseProvider: '@keylight_response_provider'
     keylight_util_health_check_provider:
         class: KeylightUtilBundle\Services\Health\HealthCheckProvider
+    KeylightUtilBundle\Services\Health\HealthCheckProvider: '@keylight_util_health_check_provider'
     keylight_util_health_check_git:
         class: KeylightUtilBundle\Services\Health\GitHealthCheckProvider
         public: false
         tags:
             - { name: keylight_util.health_check }
+    KeylightUtilBundle\Services\Health\GitHealthCheckProvider: '@keylight_util_health_check_git'

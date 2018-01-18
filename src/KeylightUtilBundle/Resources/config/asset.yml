@@ -1,6 +1,8 @@
 services:
     keylight_util_asset_manager:
         class: KeylightUtilBundle\Services\Asset\AssetManager
+    KeylightUtilBundle\Services\Asset\AssetManager: '@keylight_util_asset_manager'
+    KeylightUtilBundle\Services\Asset\AssetManagerInterface: '@keylight_util_asset_manager'
     keylight_util_generic_asset_handler:
         class: KeylightUtilBundle\Services\Asset\Handlers\GenericAssetHandler
         arguments:
@@ -9,6 +11,7 @@ services:
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 255 }
+    KeylightUtilBundle\Services\Asset\Handlers\GenericAssetHandler: '@keylight_util_generic_asset_handler'
     keylight_util_image_asset_handler:
         class: KeylightUtilBundle\Services\Asset\Handlers\ImageAssetHandler
         arguments:
@@ -18,6 +21,7 @@ services:
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 50 }
+    KeylightUtilBundle\Services\Asset\Handlers\ImageAssetHandler: '@keylight_util_image_asset_handler'
     keylight_util_pdf_asset_handler:
         class: KeylightUtilBundle\Services\Asset\Handlers\PdfAssetHandler
         arguments:
@@ -27,6 +31,7 @@ services:
         public: false
         tags:
             - { name: keylight.asset_handler, priority: 50 }
+    KeylightUtilBundle\Services\Asset\Handlers\PdfAssetHandler: '@keylight_util_pdf_asset_handler'
     keylight_util_asset_sanitizer:
         class: KeylightUtilBundle\Services\Asset\AssetSanitizer
         arguments:
@@ -35,18 +40,23 @@ services:
             - "@keylight_util_asset_manager"
             - "@keylight_util_entity_manager"
             - "%keylight_util_asset_images%"
+    KeylightUtilBundle\Services\Asset\AssetSanitizer: '@keylight_util_asset_sanitizer'
     keylight_util_asset_repository:
         class: KeylightUtilBundle\Entity\Repository\AssetRepository
         factory: doctrine.orm.entity_manager:getRepository
         arguments:
             - "KeylightUtilBundle:Asset"
+    KeylightUtilBundle\Entity\Repository\AssetRepository: '@keylight_util_asset_repository'
     keylight_util_asset_factory:
         class: KeylightUtilBundle\Services\Asset\AssetFactory
+    KeylightUtilBundle\Services\Asset\AssetFactory: '@keylight_util_asset_factory'
     # PROVIDERS
     keylight_util_asset_provider:
         class: KeylightUtilBundle\Services\Asset\Providers\AssetProvider
         arguments:
             - "@oneup_flysystem.default_filesystem"
+    KeylightUtilBundle\Services\Asset\Providers\AssetProvider: '@keylight_util_asset_provider'
+    KeylightUtilBundle\Services\Asset\Providers\AssetProviderInterface: '@keylight_util_asset_provider'
     keylight_util_cloudfront_asset_provider:
         class: KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontAssetProvider
         arguments:
@@ -59,12 +69,14 @@ services:
             - "%keylight_util_asset_secure_base_path%"
         tags:
             - { name: keylight.asset_provider }
+    KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontAssetProvider:  '@keylight_util_cloudfront_asset_provider'
     keylight_util_local_asset_provider:
         class: KeylightUtilBundle\Services\Asset\Providers\Local\LocalAssetProvider
         arguments:
             - "@oneup_flysystem.default_filesystem"
         tags:
             - { name: keylight.asset_provider }
+    KeylightUtilBundle\Services\Asset\Providers\Local\LocalAssetProvider: '@keylight_util_local_asset_provider'
     keylight_util_asset_storage:
         class: KeylightUtilBundle\Services\Asset\Storage\AssetStorage
         arguments:
@@ -72,3 +84,4 @@ services:
             - "%keylight_util_asset_public_base_path%"
             - "%keylight_util_asset_secure_base_path%"
             - "%keylight_util_asset_folder%"
+    KeylightUtilBundle\Services\Asset\Storage\AssetStorage: '@keylight_util_asset_storage'
