@@ -41,5 +41,7 @@ services:
     keylight_util_health_check_db:
         class: KeylightUtilBundle\Services\Health\DBHealthCheckProvider
         public: false
+        arguments:
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: keylight_util.health_check }
