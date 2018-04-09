@@ -38,3 +38,8 @@ services:
         public: false
         tags:
             - { name: keylight_util.health_check }
+    keylight_util_health_check_db:
+        class: KeylightUtilBundle\Services\Health\DBHealthCheckProvider
+        public: false
+        tags:
+            - { name: keylight_util.health_check }
