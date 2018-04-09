@@ -2,6 +2,7 @@
 namespace KeylightUtilBundle\Services\Health;
 
 use Doctrine\ORM\EntityManagerInterface;
+use KeylightUtilBundle\Entity\Asset;
 use KeylightUtilBundle\Model\Health\HealthCheck;
 use KeylightUtilBundle\Model\Health\HealthCheckStatusTypes;
 
@@ -30,7 +31,7 @@ class DBHealthCheckProvider implements HealthCheckProviderInterface
         $healthCheck->setKey("db");
 
         try {
-            $this->entityManager->getConnection();
+            $this->entityManager->getRepository(Asset::class)->findBy([ 'id' => 1 ]);
             $healthCheck->addValue("connection", HealthCheckStatusTypes::OK);
         } catch (\Exception $exception) {
             $healthCheck->setStatus(HealthCheckStatusTypes::ERROR);
