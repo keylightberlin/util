@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle;
 
+use KeylightUtilBundle\DependencyInjection\CompilerPasses\DepersonalizePass;
 use KeylightUtilBundle\DependencyInjection\CompilerPasses\AssetHandlerCompilerPass;
 use KeylightUtilBundle\DependencyInjection\CompilerPasses\AssetProviderCompilerPass;
 use KeylightUtilBundle\DependencyInjection\CompilerPasses\HealthCheckCompilerPass;
@@ -16,5 +17,6 @@ class KeylightUtilBundle extends Bundle
         $container->addCompilerPass(new AssetHandlerCompilerPass());
         $container->addCompilerPass(new AssetProviderCompilerPass());
         $container->addCompilerPass(new HealthCheckCompilerPass());
+        $container->addCompilerPass(new DepersonalizePass());
     }
 }
