@@ -71,7 +71,7 @@ class NameGenerator
      */
     public static function getName(): string
     {
-        $name = rand(0,1)?self::getFemaleName():self::getMailName();
+        $name = rand(0,1)?self::getFemaleName():self::getMaleName();
 
         return $name;
     }
@@ -79,7 +79,7 @@ class NameGenerator
     /**
      * @return string
      */
-    public static function getMailName(): string
+    public static function getMaleName(): string
     {
         return self::$maleNames[array_rand(self::$maleNames)];
     }
