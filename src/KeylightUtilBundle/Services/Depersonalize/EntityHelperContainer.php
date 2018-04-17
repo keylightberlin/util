@@ -56,7 +56,8 @@ class EntityHelperContainer
      * @param string $entityClassName
      * @return EntityHelperInterface
      */
-    public function getHelperForEntityClassName(string $entityClassName) {
+    public function getHelperForEntityClassName(string $entityClassName): EntityHelperInterface
+    {
         /** @var EntityHelperInterface $helper */
         foreach ($this->helpers as $helper)
         {
