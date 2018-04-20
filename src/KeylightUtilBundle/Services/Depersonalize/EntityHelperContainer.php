@@ -39,36 +39,23 @@ class EntityHelperContainer
      */
     public function getHelperForEntity($element): EntityHelperInterface
     {
-        $elementType = gettype($element);
+        /** @var EntityHelperInterface $helper */
+        foreach ($this->helpers as $helper)
+        {
+            if ($helper->supports($element)) {
+                return $helper;
+            }
+        }
 
+        $elementType = gettype($element);
         if ($elementType !== 'object') {
             throw new OutOfBoundsException(sprintf(
                 'Expected object, but element of type "%s" was found', $elementType
             ));
         } else {
-            $elementClass = get_class($element);
+            throw new \UnexpectedValueException(sprintf(
+                'Helper for the object type "%s" was not found.', get_class($element)
+            ));
         }
-
-        return $this->getHelperForEntityClassName($elementClass);
     }
-
-    /**
-     * @param string $entityClassName
-     * @return EntityHelperInterface
-     */
-    public function getHelperForEntityClassName(string $entityClassName): EntityHelperInterface
-    {
-        /** @var EntityHelperInterface $helper */
-        foreach ($this->helpers as $helper)
-        {
-            if ($entityClassName === $helper->getEntityClass()) {
-                return $helper;
-            }
-        }
-
-        throw new \UnexpectedValueException(sprintf(
-            'Helper for the object type "%s" was not found', $entityClassName
-        ));
-    }
-
 }

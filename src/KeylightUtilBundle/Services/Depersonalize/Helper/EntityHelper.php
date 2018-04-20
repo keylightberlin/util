@@ -56,10 +56,9 @@ abstract class EntityHelper implements EntityHelperInterface
     public function depersonalizeItem($item)
     {
         $this->ensureSupportedElement($item);
-
         $this->depersonalizeData($item);
-
         $this->entityManager->persist($item);
+        return $item;
     }
 
     public function depersonalizeAll(): void
@@ -92,5 +91,18 @@ abstract class EntityHelper implements EntityHelperInterface
                 ));
             }
         }
+    }
+
+    public function supports($element): bool
+    {
+        $supports = false;
+
+        $requiredClass = $this->getEntityClass();
+        $elementType = gettype($element);
+
+        if ($elementType === 'object' && $element instanceof $requiredClass) {
+            $supports = true;
+        }
+        return $supports;
     }
 }

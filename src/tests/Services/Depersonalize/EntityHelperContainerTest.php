@@ -9,23 +9,12 @@ use PHPUnit\Framework\TestCase;
 class EntityHelperContainerTest extends TestCase
 {
 
-    public function testGetHelperForEntityClassName()
-    {
-        $entityHelper = $this->createMock(EntityHelperInterface::class);
-        $entityHelper->method('getEntityClass')->willReturn('SomeEntity');
-
-        $entityHelperContainer = new EntityHelperContainer();
-        $entityHelperContainer->addHelper($entityHelper);
-
-        $this->assertEquals($entityHelper, $entityHelperContainer->getHelperForEntityClassName('SomeEntity'));
-    }
-
     public function testGetHelperForEntity()
     {
         $entity = new \stdClass();
 
         $entityHelper = $this->createMock(EntityHelperInterface::class);
-        $entityHelper->method('getEntityClass')->willReturn(get_class($entity));
+        $entityHelper->method('supports')->willReturn(true);
 
         $entityHelperContainer = new EntityHelperContainer();
         $entityHelperContainer->addHelper($entityHelper);

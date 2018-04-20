@@ -12,4 +12,6 @@ interface EntityHelperInterface
     public function depersonalizeItem($item);
 
     public function depersonalizeAll(): void;
+
+    public function supports($element): bool;
 }

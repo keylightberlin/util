@@ -24,7 +24,6 @@ class Depersonalize
         /** @var EntityHelperInterface $helper */
         foreach ($this->helperContainer->getHelpers() as $helper) {
 
-
             $helper->depersonalizeAll();
         }
     }
