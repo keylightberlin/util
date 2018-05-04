@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Services\Log\Processor;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class AppNameProcessor implements LoggerProcessorInterface
@@ -26,9 +27,12 @@ class AppNameProcessor implements LoggerProcessorInterface
      */
     public function __invoke(array $record): array
     {
+        /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
-        $record['app_name'] = $request->server->get('X_APP_NAME');
+        if ( null !== $request ) {
+            $record['app_name'] = $request->server->get('X_APP_NAME');
+        }
 
         return $record;
     }

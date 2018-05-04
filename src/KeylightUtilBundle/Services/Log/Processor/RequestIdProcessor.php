@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\Services\Log\Processor;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestIdProcessor implements LoggerProcessorInterface
@@ -26,9 +27,12 @@ class RequestIdProcessor implements LoggerProcessorInterface
      */
     public function __invoke(array $record): array
     {
+        /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
-        $record['request_id'] = $request->server->get(self::X_REQUEST_ID);
+        if ( null !== $request ) {
+            $record['request_id'] = $request->server->get(self::X_REQUEST_ID);
+        }
 
         return $record;
     }
