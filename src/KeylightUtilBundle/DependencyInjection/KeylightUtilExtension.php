@@ -1,6 +1,7 @@
 <?php
 namespace KeylightUtilBundle\DependencyInjection;
 
+use KeylightUtilBundle\Services\Depersonalize\Helper\EntityHelperInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -35,6 +36,8 @@ class KeylightUtilExtension extends Extension
         $container->setParameter('keylight_util_asset_public_base_path', $config['asset']['public_base_path']);
         $container->setParameter('keylight_util_asset_secure_base_path', $config['asset']['secure_base_path']);
         $container->setParameter('keylight_util_asset_folder', $config['asset']['folder']);
+
+        $container->registerForAutoconfiguration(EntityHelperInterface::class)->addTag(EntityHelperInterface::class);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

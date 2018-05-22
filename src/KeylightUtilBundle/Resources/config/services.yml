@@ -46,6 +46,14 @@ services:
         tags:
             - { name: keylight_util.health_check }
 
+    KeylightUtilBundle\Services\Depersonalize\Depersonalize:
+        class: KeylightUtilBundle\Services\Depersonalize\Depersonalize
+        arguments:
+            - '@KeylightUtilBundle\Services\Depersonalize\EntityHelperContainer'
+
+    KeylightUtilBundle\Services\Depersonalize\EntityHelperContainer:
+        class: KeylightUtilBundle\Services\Depersonalize\EntityHelperContainer
+
     KeylightUtilBundle\Services\Log\Processor\AppNameProcessor:
         class: KeylightUtilBundle\Services\Log\Processor\AppNameProcessor
         arguments:
