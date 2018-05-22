@@ -53,3 +53,27 @@ services:
 
     KeylightUtilBundle\Services\Depersonalize\EntityHelperContainer:
         class: KeylightUtilBundle\Services\Depersonalize\EntityHelperContainer
+
+    KeylightUtilBundle\Services\Log\Processor\AppNameProcessor:
+        class: KeylightUtilBundle\Services\Log\Processor\AppNameProcessor
+        arguments:
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+        tags: [ monolog.processor ]
+
+    KeylightUtilBundle\Services\Log\Processor\DoctrineContextProcessor:
+        class: KeylightUtilBundle\Services\Log\Processor\DoctrineContextProcessor
+        arguments:
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+        tags: [ monolog.processor ]
+
+    KeylightUtilBundle\Services\Log\Processor\RequestIdProcessor:
+        class: KeylightUtilBundle\Services\Log\Processor\RequestIdProcessor
+        arguments:
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+        tags: [ monolog.processor ]
+
+    KeylightUtilBundle\Services\Log\Processor\SessionIdProcessor:
+        class: KeylightUtilBundle\Services\Log\Processor\SessionIdProcessor
+        arguments:
+            - '@Symfony\Component\HttpFoundation\Session\SessionInterface'
+        tags: [ monolog.processor ]
