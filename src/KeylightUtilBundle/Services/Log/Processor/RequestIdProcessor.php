@@ -31,7 +31,7 @@ class RequestIdProcessor implements LoggerProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ( null !== $request ) {
-            $record['request_id'] = $request->server->get(self::X_REQUEST_ID);
+            $record['extra']['request_id'] = $request->server->get(self::X_REQUEST_ID);
         }
 
         return $record;

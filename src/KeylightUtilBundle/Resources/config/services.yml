@@ -77,3 +77,8 @@ services:
         arguments:
             - '@Symfony\Component\HttpFoundation\Session\SessionInterface'
         tags: [ monolog.processor ]
+
+    KeylightUtilBundle\Services\Log\LogstashFormatter:
+        class: KeylightUtilBundle\Services\Log\LogstashFormatter
+        arguments:
+            - 'symfony'

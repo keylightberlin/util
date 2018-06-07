@@ -31,7 +31,7 @@ class AppNameProcessor implements LoggerProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ( null !== $request ) {
-            $record['app_name'] = $request->server->get('X_APP_NAME');
+            $record['extra']['app_name'] = $request->server->get('X_APP_NAME');
         }
 
         return $record;

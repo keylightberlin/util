@@ -25,7 +25,7 @@ class SessionIdProcessor implements LoggerProcessorInterface
             return $record;
         }
 
-        $record['session_id'] = $this->session->getId();
+        $record['extra']['session_id'] = $this->session->getId();
 
         return $record;
     }
