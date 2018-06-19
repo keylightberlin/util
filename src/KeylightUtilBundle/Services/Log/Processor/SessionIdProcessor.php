@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionIdProcessor implements LoggerProcessorInterface
 {
+    const EXTRA_SESSION_ID = 'session_id';
+
     /**
      * @var SessionInterface
      */
@@ -25,7 +27,7 @@ class SessionIdProcessor implements LoggerProcessorInterface
             return $record;
         }
 
-        $record['extra']['session_id'] = $this->session->getId();
+        $record['extra'][self::EXTRA_SESSION_ID] = $this->session->getId();
 
         return $record;
     }

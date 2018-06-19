@@ -2,6 +2,9 @@
 
 namespace KeylightUtilBundle\Services\Log;
 
+use KeylightUtilBundle\Services\Log\Processor\AppNameProcessor;
+use KeylightUtilBundle\Services\Log\Processor\EnvironmentProcessor;
+use KeylightUtilBundle\Services\Log\Processor\RequestIdProcessor;
 use Monolog\Formatter\NormalizerFormatter;
 
 class LogstashFormatter extends NormalizerFormatter
@@ -63,19 +66,24 @@ class LogstashFormatter extends NormalizerFormatter
         );
 
         if (!empty($record['extra'])) {
-            if (isset($record['extra']['app_name'])) {
-                $message['application'] = $record['extra']['app_name'];
-                unset($record['extra']['app_name']);
+            if (isset($record['extra'][AppNameProcessor::EXTRA_APP_NAME])) {
+                $message['application'] = $record['extra'][AppNameProcessor::EXTRA_APP_NAME];
+                unset($record['extra'][AppNameProcessor::EXTRA_APP_NAME]);
             }
 
-            if (isset($record['extra']['environment'])) {
-                $message['environment'] = $record['extra']['environment'];
-                unset($record['extra']['environment']);
+            if (isset($record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT])) {
+                $message['environment'] = $record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT];
+                unset($record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT]);
             }
 
-            if (isset($record['extra']['request_id'])) {
-                $message['symfony']['x-request-id'] = $record['extra']['request_id'];
-                unset($record['extra']['request_id']);
+            if (isset($record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT])) {
+                $message[$this->applicationName]['kernel.environment'] = $record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT];
+                unset($record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT]);
+            }
+
+            if (isset($record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID])) {
+                $message[$this->applicationName]['x-request-id'] = $record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID];
+                unset($record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID]);
             }
         }
 

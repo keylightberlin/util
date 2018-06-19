@@ -78,6 +78,13 @@ services:
             - '@Symfony\Component\HttpFoundation\Session\SessionInterface'
         tags: [ monolog.processor ]
 
+    KeylightUtilBundle\Services\Log\Processor\EnvironmentProcessor:
+        class: KeylightUtilBundle\Services\Log\Processor\EnvironmentProcessor
+        arguments:
+            - '%kernel.environment%'
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+        tags: [ monolog.processor ]
+
     KeylightUtilBundle\Services\Log\LogstashFormatter:
         class: KeylightUtilBundle\Services\Log\LogstashFormatter
         arguments:

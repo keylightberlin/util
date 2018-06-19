@@ -8,6 +8,8 @@ class AppNameProcessor implements LoggerProcessorInterface
 {
     const X_APP_NAME = 'X_APP_NAME';
 
+    const EXTRA_APP_NAME = 'app_name';
+
     /**
      * @var RequestStack
      */
@@ -31,7 +33,7 @@ class AppNameProcessor implements LoggerProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ( null !== $request ) {
-            $record['extra']['app_name'] = $request->server->get('X_APP_NAME');
+            $record['extra'][self::EXTRA_APP_NAME] = $request->server->get('X_APP_NAME');
         }
 
         return $record;
