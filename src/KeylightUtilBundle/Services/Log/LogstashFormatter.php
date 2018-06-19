@@ -44,7 +44,7 @@ class LogstashFormatter extends NormalizerFormatter
 
         $message = $this->logstashRecord($record);
 
-        return $this->toJson($message);
+        return $this->toJson($message) . "\n";
     }
 
     /**
