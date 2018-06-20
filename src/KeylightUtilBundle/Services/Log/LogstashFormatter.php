@@ -5,7 +5,9 @@ namespace KeylightUtilBundle\Services\Log;
 use KeylightUtilBundle\Services\Log\Processor\AppNameProcessor;
 use KeylightUtilBundle\Services\Log\Processor\EnvironmentProcessor;
 use KeylightUtilBundle\Services\Log\Processor\RequestIdProcessor;
+use KeylightUtilBundle\Services\Log\Processor\SessionIdProcessor;
 use Monolog\Formatter\NormalizerFormatter;
+use Symfony\Component\Yaml\Yaml;
 
 class LogstashFormatter extends NormalizerFormatter
 {
@@ -68,23 +70,28 @@ class LogstashFormatter extends NormalizerFormatter
         if (!empty($record['extra'])) {
             if (isset($record['extra'][AppNameProcessor::EXTRA_APP_NAME])) {
                 $message['application'] = $record['extra'][AppNameProcessor::EXTRA_APP_NAME];
-                unset($record['extra'][AppNameProcessor::EXTRA_APP_NAME]);
             }
+            unset($record['extra'][AppNameProcessor::EXTRA_APP_NAME]);
 
             if (isset($record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT])) {
                 $message['environment'] = $record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT];
-                unset($record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT]);
             }
+            unset($record['extra'][EnvironmentProcessor::EXTRA_SERVER_ENVIRONMENT]);
 
             if (isset($record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT])) {
                 $message[$this->applicationName]['kernel.environment'] = $record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT];
-                unset($record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT]);
             }
+            unset($record['extra'][EnvironmentProcessor::EXTRA_APP_ENVIRONMENT]);
 
             if (isset($record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID])) {
                 $message[$this->applicationName]['x-request-id'] = $record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID];
-                unset($record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID]);
             }
+            unset($record['extra'][RequestIdProcessor::EXTRA_REQUEST_ID]);
+
+            if (isset($record['extra'][SessionIdProcessor::EXTRA_SESSION_ID])) {
+                $message[$this->applicationName]['session-id'] = $record['extra'][SessionIdProcessor::EXTRA_SESSION_ID];
+            }
+            unset($record['extra'][SessionIdProcessor::EXTRA_SESSION_ID]);
         }
 
         if (isset($record['message'])) {
@@ -124,9 +131,10 @@ class LogstashFormatter extends NormalizerFormatter
         if (is_scalar($value)) {
             $string = (string)$value;
         } elseif (is_array($value)) {
-            $string = json_encode($value);
+            $string = Yaml::dump($value);
+        } elseif (is_object($value)) {
+            $string = Yaml::dump($value, 2, 4, Yaml::DUMP_OBJECT);
         }
         return $string;
     }
-
 }
