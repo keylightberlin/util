@@ -1,7 +1,9 @@
 <?php
 namespace tests;
 
-class TestRandomThingTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class TestRandomThingTest extends TestCase
 {
     public function testRandomThing()
     {
