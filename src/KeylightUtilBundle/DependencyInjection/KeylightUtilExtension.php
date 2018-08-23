@@ -43,5 +43,6 @@ class KeylightUtilExtension extends Extension
         $loader->load('services.yml');
         $loader->load('aws.yml');
         $loader->load('asset.yml');
+        $loader->load('aliases.yml');
     }
 }
