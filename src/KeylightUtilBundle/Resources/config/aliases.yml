@@ -1,0 +1,70 @@
+services:
+    KeylightUtilBundle\Services\Asset\AssetManager:
+        alias: keylight_util_asset_manager
+
+    KeylightUtilBundle\Services\Asset\Handlers\GenericAssetHandler:
+        alias: keylight_util_generic_asset_handler
+
+    KeylightUtilBundle\Services\Asset\Handlers\ImageAssetHandler:
+        alias: keylight_util_image_asset_handler
+
+    KeylightUtilBundle\Services\Asset\Handlers\PdfAssetHandler:
+        alias: keylight_util_pdf_asset_handler
+
+    KeylightUtilBundle\Services\Asset\AssetSanitizer:
+        alias: keylight_util_asset_sanitizer
+
+    KeylightUtilBundle\Entity\Repository\AssetRepository:
+        alias: keylight_util_asset_repository
+
+    KeylightUtilBundle\Services\Asset\AssetFactory:
+        alias: keylight_util_asset_factory
+
+    # PROVIDERS
+    KeylightUtilBundle\Services\Asset\Providers\AssetProvider:
+        alias: keylight_util_asset_provider
+
+    KeylightUtilBundle\Services\Asset\Providers\AWS\CloudfrontAssetProvider:
+        alias: keylight_util_cloudfront_asset_provider
+
+    KeylightUtilBundle\Services\Asset\Providers\Local\LocalAssetProvider:
+        alias: keylight_util_local_asset_provider
+
+    KeylightUtilBundle\Services\Asset\Storage\AssetStorage:
+        alias: keylight_util_asset_storage
+
+    Aws\S3\S3Client:
+        alias: keylight_util_s3_client
+
+    Aws\CloudFront\CloudFrontClient:
+        alias: keylight_util_cloudfront_client
+
+    KeylightUtilBundle\Services\EntityManager\EntityManager:
+        alias: keylight_util_entity_manager
+
+    KeylightUtilBundle\Services\Twig\KeylightTwigExtension:
+        alias: keylight_util_twig_extension
+
+    KeylightUtilBundle\Services\String\StringFormatter:
+        alias: keylight_util_string_formatter
+
+    KeylightUtilBundle\Services\Mailer\MailerService:
+        alias: keylight_util_mailer
+
+    KeylightUtilBundle\Services\String\RandomStringUtil:
+        alias: keylight_util_random_string_util
+
+    KeylightUtilBundle\Services\Uuid\UuidProvider:
+        alias: keylight_util_uuid_provider
+
+    KeylightUtilBundle\Services\Response\ResponseProvider:
+        alias: keylight_response_provider
+
+    KeylightUtilBundle\Services\Health\HealthCheckProvider:
+        alias: keylight_util_health_check_provider
+
+    KeylightUtilBundle\Services\Health\GitHealthCheckProvider:
+        alias: keylight_util_health_check_git
+
+    KeylightUtilBundle\Services\Health\DBHealthCheckProvider:
+        alias: keylight_util_health_check_db
