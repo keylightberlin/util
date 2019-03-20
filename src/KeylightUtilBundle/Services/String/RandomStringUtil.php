@@ -58,7 +58,7 @@ final class RandomStringUtil
             case static::PATTERN_CAPITAL_LETTER:
                 $resolvedSymbol = $this->getRandomCapitalLetter();
                 break;
-            case static::NUMBERS:
+            case static::PATTERN_NUMBER:
                 $resolvedSymbol = $this->getRandomNumber();
                 break;
             case static::PATTERN_ANY_CHAR:
